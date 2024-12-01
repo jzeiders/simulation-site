@@ -254,32 +254,30 @@ function generateBingoCard(): BingoCard {
     return { numbers: card.flat() }
 }
 
-function playBingoGame(numPlayers: number): { turns: number; winningPositions: { row: number; col: number }[] } {
-    // Generate cards for all players
-    const cards = Array.from({ length: numPlayers }, () => generateBingoCard());
-    
-    // Create array of numbers 1-75 and shuffle them
-    const numbers = Array.from({ length: 75 }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
-    // Draw numbers until someone wins
-    let turns = 0;
-    const drawnNumbers: number[] = [];
-    
-    while (turns < 75) {
-        turns++;
-        drawnNumbers.push(numbers[turns - 1]);
-        
-        // Check each player's card
-        for (const card of cards) {
-            const winningPositions = checkDidWin(card, drawnNumbers);
-            if (winningPositions) {
-                return { turns, winningPositions };
+interface BingoGame {
+    cards: BingoCard[];
+    numbers: number[];
+}
+
+function generateBingoGame(): BingoGame {
+    return {
+        cards: Array.from({ length: numPlayers }, () => generateBingoCard()),
+        numbers: Array.from({ length: 75 }, (_, i) => i + 1).sort(() => Math.random() - 0.5)
+    }
+}
+
+function turnDidWin(game: BingoGame, drawnNumbers: number[]): number  {
+    for (let i = 0; i < game.numbers.length; i++) {
+        for (const card of game.cards) {
+            if (checkDidWin(game.cards[0], drawnNumbers.slice(0, i + 1))) {
+                return i + 1
             }
         }
     }
-    
-    // This should never happen in a real game
-    throw new Error("No winner found after 75 turns");
+    throw new Error("No winner found after 75 turns")
 }
+
+
 
 function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; col: number }[] | null {
     const size = 5;
