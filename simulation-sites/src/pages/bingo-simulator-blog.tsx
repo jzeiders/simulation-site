@@ -27,6 +27,11 @@ interface HeatMapData {
     maxFrequency: number;
 }
 
+interface GameOptions {
+    freeCenter: boolean;
+    allowFourCorners: boolean;
+}
+
 function BingoHeatMap({ heatMap }: { heatMap: HeatMapData }) {
     return (
         <div className="grid grid-cols-5 gap-1 w-full max-w-md mx-auto">
@@ -53,13 +58,17 @@ function BingoHeatMap({ heatMap }: { heatMap: HeatMapData }) {
 export default function BingoSimulatorBlog() {
     const [numGames, setNumGames] = useState(10000)
     const [numPlayers, setNumPlayers] = useState(10)
+    const [options, setOptions] = useState<GameOptions>({
+        freeCenter: false,
+        allowFourCorners: false
+    })
     const [result, setResult] = useState<SimulationResult | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
     const runSimulation = () => {
         setIsLoading(true)
         try {
-            const results = simulateGames(numGames, numPlayers)
+            const results = simulateGames(numGames, numPlayers, options)
 
             const turns = results.map(r => r.turns)
             const avgTurns = turns.reduce((a, b) => a + b, 0) / turns.length
@@ -81,7 +90,7 @@ export default function BingoSimulatorBlog() {
             const positionFrequency = new Array(25).fill(0)
             results.forEach(result => {
                 result.winningPositions.forEach(pos => {
-                    const index = pos.row + pos.col * 5
+                    const index = pos.row * 5 + pos.col
                     positionFrequency[index]++
                 })
             })
@@ -149,6 +158,28 @@ export default function BingoSimulatorBlog() {
                                 min={1}
                                 max={100}
                             />
+                        </div>
+                        <div className="space-y-2 md:col-span-2">
+                            <div className="flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    id="freeCenter"
+                                    checked={options.freeCenter}
+                                    onChange={(e) => setOptions(prev => ({ ...prev, freeCenter: e.target.checked }))}
+                                    className="h-4 w-4"
+                                />
+                                <Label htmlFor="freeCenter">Free Center Space</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <input
+                                    type="checkbox"
+                                    id="fourCorners"
+                                    checked={options.allowFourCorners}
+                                    onChange={(e) => setOptions(prev => ({ ...prev, allowFourCorners: e.target.checked }))}
+                                    className="h-4 w-4"
+                                />
+                                <Label htmlFor="fourCorners">Allow Four Corners Win</Label>
+                            </div>
                         </div>
                     </div>
                 </CardContent>
@@ -234,13 +265,18 @@ export default function BingoSimulatorBlog() {
     )
 }
 
-function simulateGames(numGames: number, numPlayers: number): { turns: number; winningPositions: { row: number; col: number }[] }[] {
+function simulateGames(
+    numGames: number, 
+    numPlayers: number, 
+    options: GameOptions
+): { turns: number; winningPositions: { row: number; col: number }[] }[] {
     const results: { turns: number; winningPositions: { row: number; col: number }[] }[] = []
     for (let i = 0; i < numGames; i++) {
-        const game = generateBingoGame(numPlayers)
+        const game = generateBingoGame(numPlayers, options)
+        const result = turnDidWin(game, game.numbers, options)
         results.push({
-            turns: turnDidWin(game, game.numbers).turns,
-            winningPositions: turnDidWin(game, game.numbers).winningPositions
+            turns: result.turns,
+            winningPositions: result.winningPositions
         })
     }
     return results
@@ -250,11 +286,21 @@ function simulateGames(numGames: number, numPlayers: number): { turns: number; w
 interface BingoCard {
     numbers: number[];
 }
-function generateBingoCard(): BingoCard {
+function generateBingoCard(options: GameOptions): BingoCard {
     const card: number[][] = []
     for (let i = 0; i < 5; i++) {
-        card.push(Array.from({ length: 15 }, (_, j) => i * 15 + j + 1).sort(() => Math.random() - 0.5).slice(0, 5))
+        card.push(Array.from({ length: 15 }, (_, j) => i * 15 + j + 1)
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 5))
     }
+    
+    // If free center is enabled, set center position to 0 (representing free space)
+    if (options.freeCenter) {
+        const centerRow = Math.floor(5/2);
+        const centerCol = Math.floor(5/2);
+        card[centerRow][centerCol] = 0;
+    }
+    
     return { numbers: card.flat() }
 }
 
@@ -263,17 +309,21 @@ interface BingoGame {
     numbers: number[];
 }
 
-function generateBingoGame(numPlayers: number): BingoGame {
+function generateBingoGame(numPlayers: number, options: GameOptions): BingoGame {
     return {
-        cards: Array.from({ length: numPlayers }, () => generateBingoCard()),
+        cards: Array.from({ length: numPlayers }, () => generateBingoCard(options)),
         numbers: Array.from({ length: 75 }, (_, i) => i + 1).sort(() => Math.random() - 0.5)
     }
 }
 
-function turnDidWin(game: BingoGame, drawnNumbers: number[]): { turns: number; winningPositions: { row: number; col: number }[] } {
+function turnDidWin(
+    game: BingoGame, 
+    drawnNumbers: number[], 
+    options: GameOptions
+): { turns: number; winningPositions: { row: number; col: number }[] } {
     for (let i = 0; i < game.numbers.length; i++) {
         for (const card of game.cards) {
-            const winningPositions = checkDidWin(card, drawnNumbers.slice(0, i + 1))
+            const winningPositions = checkDidWin(card, drawnNumbers.slice(0, i + 1), options)
             if (winningPositions) {
                 return { turns: i + 1, winningPositions }
             }
@@ -284,14 +334,32 @@ function turnDidWin(game: BingoGame, drawnNumbers: number[]): { turns: number; w
 
 
 
-function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; col: number }[] | null {
+function checkDidWin(
+    card: BingoCard, 
+    drawnNumbers: number[],
+    options: GameOptions
+): { row: number; col: number }[] | null {
     const size = 5;
     const marked = new Array(25).fill(false);
 
-    // Mark all numbers that have been drawn
+    // Mark all numbers that have been drawn or free spaces
     for (let i = 0; i < card.numbers.length; i++) {
-        if (drawnNumbers.includes(card.numbers[i])) {
+        if (card.numbers[i] === 0 || drawnNumbers.includes(card.numbers[i])) {
             marked[i] = true;
+        }
+    }
+
+    // Check four corners if enabled
+    if (options.allowFourCorners) {
+        const corners = [
+            {row: 0, col: 0},
+            {row: 0, col: size-1},
+            {row: size-1, col: 0},
+            {row: size-1, col: size-1}
+        ];
+        
+        if (corners.every(({row, col}) => marked[row * size + col])) {
+            return corners;
         }
     }
 
