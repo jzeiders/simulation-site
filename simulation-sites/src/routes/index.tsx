@@ -23,7 +23,7 @@ const articles = [
 
 function HomePage() {
   return (
-    <div>
+    <div className='min-h-screen'>
       <h1 className="text-4xl font-bold mb-6">Articles</h1>
       <div className="grid gap-6 md:grid-cols-2">
         {articles.map((article, i) => (

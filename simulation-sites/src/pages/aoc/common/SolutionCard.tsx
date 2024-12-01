@@ -62,8 +62,8 @@ export function SolutionCard({ day, title, part1, part2, explanation }: Solution
             <CardContent className="space-y-8">
                 <div className="space-y-6">
                     <div>
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-xl font-semibold mb-4">Part 1: Total Absolute Distance</h3>
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xl font-semibold">Part 1: Total Absolute Distance</h3>
                             <TestResult testResult={part1.testResult} />
                         </div>
                         <div className="text-center">
@@ -73,8 +73,8 @@ export function SolutionCard({ day, title, part1, part2, explanation }: Solution
                     </div>
 
                     <div>
-                        <div className="flex items-center justify-between">
-                            <h3 className="text-xl font-semibold mb-4">Part 2: Total Value</h3>
+                        <div className="flex items-center justify-between mb-4">
+                            <h3 className="text-xl font-semibold">Part 2: Total Value</h3>
                             <TestResult testResult={part2.testResult} />
                         </div>
                         <div className="text-center">
