@@ -4,3 +4,4 @@ The bingo blog is a simulation of a bingo game with a variable number of players
 Todo:
 1. Performance improvements
 2. Better copy for the blog post
+3. Shuffle function (DONE: This fixed the bias in the outcome function)

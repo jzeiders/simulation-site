@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 export interface Distribution {
     values: Map<number, number>;
@@ -101,19 +101,9 @@ export function DistributionChart({
                             name={`frequency${idx}`}
                         />
                     ))}
+                    <Legend verticalAlign="top" height={36} />
                 </BarChart>
             </ResponsiveContainer>
-            <div className="flex justify-center gap-4 mt-4">
-                {distributions.map((d, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                        <div 
-                            className="w-4 h-4" 
-                            style={{ backgroundColor: CHART_COLORS[idx % CHART_COLORS.length] }}
-                        />
-                        <span>{d.label}</span>
-                    </div>
-                ))}
-            </div>
         </div>
     );
 }
