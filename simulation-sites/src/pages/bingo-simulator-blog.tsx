@@ -237,7 +237,11 @@ export default function BingoSimulatorBlog() {
 function simulateGames(numGames: number, numPlayers: number): { turns: number; winningPositions: { row: number; col: number }[] }[] {
     const results: { turns: number; winningPositions: { row: number; col: number }[] }[] = []
     for (let i = 0; i < numGames; i++) {
-        results.push(playBingoGame(numPlayers))
+        const game = generateBingoGame(numPlayers)
+        results.push({
+            turns: turnDidWin(game, game.numbers).turns,
+            winningPositions: turnDidWin(game, game.numbers).winningPositions
+        })
     }
     return results
 }
@@ -259,18 +263,19 @@ interface BingoGame {
     numbers: number[];
 }
 
-function generateBingoGame(): BingoGame {
+function generateBingoGame(numPlayers: number): BingoGame {
     return {
         cards: Array.from({ length: numPlayers }, () => generateBingoCard()),
         numbers: Array.from({ length: 75 }, (_, i) => i + 1).sort(() => Math.random() - 0.5)
     }
 }
 
-function turnDidWin(game: BingoGame, drawnNumbers: number[]): number  {
+function turnDidWin(game: BingoGame, drawnNumbers: number[]): { turns: number; winningPositions: { row: number; col: number }[] } {
     for (let i = 0; i < game.numbers.length; i++) {
         for (const card of game.cards) {
-            if (checkDidWin(game.cards[0], drawnNumbers.slice(0, i + 1))) {
-                return i + 1
+            const winningPositions = checkDidWin(card, drawnNumbers.slice(0, i + 1))
+            if (winningPositions) {
+                return { turns: i + 1, winningPositions }
             }
         }
     }
@@ -282,14 +287,14 @@ function turnDidWin(game: BingoGame, drawnNumbers: number[]): number  {
 function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; col: number }[] | null {
     const size = 5;
     const marked = new Array(25).fill(false);
-    
+
     // Mark all numbers that have been drawn
     for (let i = 0; i < card.numbers.length; i++) {
         if (drawnNumbers.includes(card.numbers[i])) {
             marked[i] = true;
         }
     }
-    
+
     // Check rows
     for (let row = 0; row < size; row++) {
         let rowComplete = true;
@@ -303,7 +308,7 @@ function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; co
             return Array.from({ length: size }, (_, col) => ({ row, col }));
         }
     }
-    
+
     // Check columns
     for (let col = 0; col < size; col++) {
         let colComplete = true;
@@ -317,7 +322,7 @@ function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; co
             return Array.from({ length: size }, (_, row) => ({ row, col }));
         }
     }
-    
+
     // Check diagonal (top-left to bottom-right)
     let diagonal1Complete = true;
     for (let i = 0; i < size; i++) {
@@ -329,7 +334,7 @@ function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; co
     if (diagonal1Complete) {
         return Array.from({ length: size }, (_, i) => ({ row: i, col: i }));
     }
-    
+
     // Check diagonal (top-right to bottom-left)
     let diagonal2Complete = true;
     for (let i = 0; i < size; i++) {
@@ -341,7 +346,7 @@ function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; co
     if (diagonal2Complete) {
         return Array.from({ length: size }, (_, i) => ({ row: i, col: size - 1 - i }));
     }
-    
+
     return null;
 }
 
