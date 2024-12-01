@@ -165,16 +165,12 @@ class BingoCard {
     generateCard(): number[][] {
       const card: number[][] = []
       for (let i = 0; i < 5; i++) {
-        const column: number[] = []
-        const start = i * 15 + 1
-        const end = start + 15
-        const numbers = Array.from({length: 15}, (_, i) => i + start)
-        for (let j = 0; j < 5; j++) {
-          const index = Math.floor(Math.random() * numbers.length)
-          column.push(numbers[index])
-          numbers.splice(index, 1)
+        const numbers = Array.from({length: 15}, (_, j) => i * 15 + j + 1)
+        for (let j = numbers.length - 1; j > 0; j--) {
+          const k = Math.floor(Math.random() * (j + 1))
+          ;[numbers[j], numbers[k]] = [numbers[k], numbers[j]]
         }
-        card.push(column)
+        card.push(numbers.slice(0, 5))
       }
       return card
     }
@@ -205,20 +201,23 @@ class BingoCard {
   
   function playBingoGame(numPlayers: number): number {
     const players = Array.from({length: numPlayers}, () => new BingoCard())
-    const numbers = Array.from({length: 75}, (_, i) => i + 1)
-    const drawnNumbers: number[] = []
+    
+    const drawnNumbers = Array.from({length: 75}, (_, i) => i + 1)
+    for (let i = drawnNumbers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[drawnNumbers[i], drawnNumbers[j]] = [drawnNumbers[j], drawnNumbers[i]]
+    }
   
-    while (numbers.length > 0) {
-      const index = Math.floor(Math.random() * numbers.length)
-      const drawnNumber = numbers[index]
-      numbers.splice(index, 1)
-      drawnNumbers.push(drawnNumber)
-  
+    const calledNumbers: number[] = []
+    for (let i = 0; i < drawnNumbers.length; i++) {
+      calledNumbers.push(drawnNumbers[i])
+      
       for (const player of players) {
-        if (player.checkWin(drawnNumbers)) {
-          return drawnNumbers.length
+        if (player.checkWin(calledNumbers)) {
+          return i + 1
         }
       }
     }
-    return -1 // No winner (shouldn't happen in a real game)
+    
+    return -1
   }
