@@ -25,7 +25,7 @@ interface SolutionCardProps {
     }
     explanation: {
         part1: string
-        steps: string[]
+        part2: string
     }
 }
 
@@ -86,20 +86,16 @@ export function SolutionCard({ day, title, part1, part2, explanation }: Solution
 
                 <Separator />
 
-                <div className="space-y-4">
-                    <h3 className="text-xl font-semibold">Solution Explanation</h3>
+                <div className="space-y-4 text-left">
+                    <h3 className="text-xl font-semibold ">Solution Explanation</h3>
                     <div className="space-y-4">
                         <div>
-                            <h4 className="font-medium mb-2">Part 1: Minimum Total Distance</h4>
+                            <h4 className="font-medium mb-2">Part 1</h4>
                             <p className="text-muted-foreground">{explanation.part1}</p>
                         </div>
                         <div>
-                            <div className="font-medium mb-2">The solution follows these steps:</div>
-                            <ul className="list-decimal list-inside space-y-2">
-                                {explanation.steps.map((step, index) => (
-                                    <li key={index} className="text-muted-foreground">{step}</li>
-                                ))}
-                            </ul>
+                            <h4 className="font-medium mb-2">Part 2</h4>
+                            <p className="text-muted-foreground">{explanation.part2}</p>
                         </div>
                     </div>
                 </div>

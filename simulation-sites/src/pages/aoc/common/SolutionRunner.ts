@@ -4,7 +4,7 @@ export interface Solution<T, R> {
   part2: (input: T) => R;
   explanation: {
     part1: string;
-    steps: string[];
+    part2: string;
   };
   testCases: {
     input: string;

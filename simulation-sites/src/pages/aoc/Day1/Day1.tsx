@@ -41,13 +41,7 @@ const solution: Solution<NumberPair[], number> = {
 
     explanation: {
         part1: "The first part involves finding the minimum total distance between two arrays after optimally pairing their elements. The optimal solution pairs the smallest number from one array with the smallest from the other.",
-        steps: [
-            "Sort both arrays in ascending order",
-            "Pair elements at the same indices",
-            "Calculate the sum of absolute differences between pairs",
-            "For each number in the left array, multiply it by its count in the right array",
-            "Sum all these products for the final result"
-        ]
+        part2: "The second part calculates a weighted sum where each number from the left array is multiplied by how many times it appears in the right array, then all products are summed together."
     },
 
     testCases: {
