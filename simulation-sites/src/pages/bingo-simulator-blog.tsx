@@ -190,12 +190,34 @@ export default function BingoSimulatorBlog() {
                     <Card>
                         <CardHeader>
                             <CardTitle>Distribution of Turns to Win</CardTitle>
-                            <CardDescription>Histogram showing the frequency of games won in a certain number of turns</CardDescription>
+                            <CardDescription>Histogram showing the frequency of games won in a certain number of turns under different rules</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            {simulationDistribution && (
+                            {activeSimulation && (
                                 <DistributionChart
-                                    distribution={simulationDistribution}
+                                    distributions={[
+                                        {
+                                            label: "Basic Rules",
+                                            distribution: getWinningTurnDistribution(activeSimulation, {
+                                                checkCorners: false,
+                                                useFreeSpace: false
+                                            })
+                                        },
+                                        {
+                                            label: "With Free Space",
+                                            distribution: getWinningTurnDistribution(activeSimulation, {
+                                                checkCorners: false,
+                                                useFreeSpace: true
+                                            })
+                                        },
+                                        {
+                                            label: "Free Space & Corners",
+                                            distribution: getWinningTurnDistribution(activeSimulation, {
+                                                checkCorners: true,
+                                                useFreeSpace: true
+                                            })
+                                        }
+                                    ]}
                                     xLabel="Number of Turns"
                                     yLabel="Percentage of Games"
                                 />
@@ -210,13 +232,17 @@ export default function BingoSimulatorBlog() {
                         </CardHeader>
                         <CardContent>
                             <DistributionChart
-                                distribution={getFirstWinningTileDistribution(activeSimulation, {
-                                    checkCorners: false,
-                                    useFreeSpace: false
-                                })}
+                                distributions={[
+                                    {
+                                        label: "Basic Rules",
+                                        distribution: getFirstWinningTileDistribution(activeSimulation, {
+                                            checkCorners: false,
+                                            useFreeSpace: false
+                                        })
+                                    },  
+                                ]}
                                 xLabel="Player Number"
                                 yLabel="Percentage of Games"
-                                barColor="#82ca9d"
                             />
                         </CardContent>
                     </Card>

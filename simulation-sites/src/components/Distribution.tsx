@@ -30,37 +30,49 @@ export function getAvgValue(distribution: Distribution): number {
     return total / count;
 }
 
-interface DistributionChartProps {
+interface LabeledDistribution {
+    label: string;
     distribution: Distribution;
+}
+
+interface DistributionChartProps {
+    distributions: LabeledDistribution[];
     xLabel?: string;
     yLabel?: string;
-    barColor?: string;
     height?: number | string;
 }
 
+// Predefined colors for the bars
+const CHART_COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#a4de6c'];
+
 export function DistributionChart({ 
-    distribution,
+    distributions,
     xLabel = "Value",
     yLabel = "Percentage", 
-    barColor = "#8884d8",
     height = "400px"
 }: DistributionChartProps) {
     const chartData = useMemo(() => {
-        const total = Array.from(distribution.values.values()).reduce((a, b) => a + b, 0);
-        const minValue = getMinValue(distribution);
-        const maxValue = getMaxValue(distribution);
+        // Find global min/max across all distributions
+        const allValues = distributions.flatMap(d => 
+            Array.from(d.distribution.values.keys())
+        );
+        const minValue = Math.min(...allValues);
+        const maxValue = Math.max(...allValues);
         
-        // Create array with all values between min and max
+        // Create unified data points for all values
         const data = [];
         for (let i = minValue; i <= maxValue; i++) {
-            data.push({
-                value: i,
-                frequency: ((distribution.values.get(i) || 0) / total) * 100
+            const point: any = { value: i };
+            distributions.forEach((d, idx) => {
+                const total = Array.from(d.distribution.values.values())
+                    .reduce((a, b) => a + b, 0);
+                const count = d.distribution.values.get(i) || 0;
+                point[`frequency${idx}`] = (count / total) * 100;
             });
+            data.push(point);
         }
-        
         return data;
-    }, [distribution]);
+    }, [distributions]);
 
     return (
         <div style={{ height }}>
@@ -76,11 +88,32 @@ export function DistributionChart({
                         tickFormatter={(value) => `${value.toFixed(1)}%`}
                     />
                     <Tooltip
-                        formatter={(value: number) => [`${value.toFixed(1)}%`, yLabel]}
+                        formatter={(value: number, name: string) => {
+                            const idx = parseInt(name.replace('frequency', ''));
+                            return [`${value.toFixed(1)}%`, distributions[idx].label];
+                        }}
                     />
-                    <Bar dataKey="frequency" fill={barColor} />
+                    {distributions.map((_, idx) => (
+                        <Bar 
+                            key={idx}
+                            dataKey={`frequency${idx}`}
+                            fill={CHART_COLORS[idx % CHART_COLORS.length]}
+                            name={`frequency${idx}`}
+                        />
+                    ))}
                 </BarChart>
             </ResponsiveContainer>
+            <div className="flex justify-center gap-4 mt-4">
+                {distributions.map((d, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                        <div 
+                            className="w-4 h-4" 
+                            style={{ backgroundColor: CHART_COLORS[idx % CHART_COLORS.length] }}
+                        />
+                        <span>{d.label}</span>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
