@@ -1,5 +1,20 @@
 import { describe, it, expect } from 'vitest'
-import { getWinTypes } from './bingo-simulator-blog'
+import { getWinTypes, getWinningTileIndices, makeBingoCard, makeBingoGame } from './bingo-simulator-blog'
+
+// Add seeded random number generator
+class SeededRandom {
+    private seed: number;
+
+    constructor(seed: number) {
+        this.seed = seed;
+    }
+
+    // Simple implementation of a seeded random number generator
+    random(): number {
+        const x = Math.sin(this.seed++) * 10000;
+        return x - Math.floor(x);
+    }
+}
 
 describe('Bingo Win Conditions', () => {
     // Helper function to create a test card with specific numbers
@@ -105,4 +120,130 @@ describe('Bingo Win Conditions', () => {
         expect(winTypes).toContainEqual({ type: 'row', row: 2 })
         expect(winTypes).toHaveLength(1)
     })
-}) 
+})
+
+describe('getWinningTileIndices', () => {
+    it('should return correct indices for row win', () => {
+        const winType = { type: 'row' as const, row: 2 }
+        const indices = getWinningTileIndices(winType)
+        
+        expect(indices).toEqual([
+            { row: 2, col: 0 },
+            { row: 2, col: 1 },
+            { row: 2, col: 2 },
+            { row: 2, col: 3 },
+            { row: 2, col: 4 }
+        ])
+    })
+
+    it('should return correct indices for column win', () => {
+        const winType = { type: 'col' as const, col: 3 }
+        const indices = getWinningTileIndices(winType)
+        
+        expect(indices).toEqual([
+            { row: 0, col: 3 },
+            { row: 1, col: 3 },
+            { row: 2, col: 3 },
+            { row: 3, col: 3 },
+            { row: 4, col: 3 }
+        ])
+    })
+
+    it('should return correct indices for left diagonal win', () => {
+        const winType = { type: 'diagonal' as const, direction: 'left' as const }
+        const indices = getWinningTileIndices(winType)
+        
+        expect(indices).toEqual([
+            { row: 0, col: 0 },
+            { row: 1, col: 1 },
+            { row: 2, col: 2 },
+            { row: 3, col: 3 },
+            { row: 4, col: 4 }
+        ])
+    })
+
+    it('should return correct indices for right diagonal win', () => {
+        const winType = { type: 'diagonal' as const, direction: 'right' as const }
+        const indices = getWinningTileIndices(winType)
+        
+        expect(indices).toEqual([
+            { row: 0, col: 4 },
+            { row: 1, col: 3 },
+            { row: 2, col: 2 },
+            { row: 3, col: 1 },
+            { row: 4, col: 0 }
+        ])
+    })
+
+    it('should return correct indices for four corners win', () => {
+        const winType = { type: 'fourCorners' as const }
+        const indices = getWinningTileIndices(winType)
+        
+        expect(indices).toEqual([
+            { row: 0, col: 0 },
+            { row: 0, col: 4 },
+            { row: 4, col: 0 },
+            { row: 4, col: 4 }
+        ])
+    })
+})
+
+describe('Bingo Card Generation (100 Seeded Tests)', () => {
+    it('should generate 100 valid cards with fixed seed', () => {
+        const seededRandom = new SeededRandom(12345); // Fixed seed
+        
+        for (let test = 0; test < 100; test++) {
+            const card = makeBingoCard(() => seededRandom.random());
+            
+            // Check each column (B I N G O)
+            for (let col = 0; col < 5; col++) {
+                const colNumbers = [
+                    card.numbers[col],      // Row 1
+                    card.numbers[col + 5],  // Row 2
+                    card.numbers[col + 10], // Row 3
+                    card.numbers[col + 15], // Row 4
+                    card.numbers[col + 20]  // Row 5
+                ];
+
+                // Define valid ranges for each column
+                const minValue = col * 15 + 1;
+                const maxValue = (col + 1) * 15;
+
+                // Check each number in the column is within range
+                colNumbers.forEach(num => {
+                    expect(num).toBeGreaterThanOrEqual(minValue)
+                    expect(num).toBeLessThanOrEqual(maxValue)
+                });
+
+                // Check for duplicates
+                const uniqueNumbers = new Set(colNumbers);
+                expect(uniqueNumbers.size).toBe(5)
+            }
+        }
+    });
+});
+
+describe('Bingo Game Generation (100 Seeded Tests)', () => {
+    it('should generate 100 valid games with fixed seed', () => {
+        const seededRandom = new SeededRandom(12345); // Fixed seed
+        
+        for (let test = 0; test < 100; test++) {
+            const game = makeBingoGame(4, () => seededRandom.random());
+            
+            // Check drawn numbers
+            expect(game.numbers).toHaveLength(75)
+            
+            const uniqueDrawnNumbers = new Set(game.numbers);
+            expect(uniqueDrawnNumbers.size).toBe(75)
+            
+            // Check all numbers 1-75 are present
+            const expectedNumbers = new Set(Array.from({ length: 75 }, (_, i) => i + 1));
+            game.numbers.forEach(num => {
+                expect(expectedNumbers.has(num)).toBe(true)
+            });
+
+            // Check player cards
+            expect(game.cards).toHaveLength(4)
+        }
+    });
+}); 

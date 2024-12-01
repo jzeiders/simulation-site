@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { cn } from "@/lib/utils"
+import { cn, shuffleArray } from "@/lib/utils"
 import { useMemo, useState } from 'react'
 import { cacheable } from '@/lib/Cache';
-import { uniqBy } from 'es-toolkit'
+import { shuffle, uniqBy } from 'es-toolkit'
 
 interface WinningTile {
     row: number;
@@ -265,40 +265,6 @@ export default function BingoSimulatorBlog() {
                             />
                         </CardContent>
                     </Card>
-
-                    {/* <Card className="mt-8">
-                        <CardHeader>
-                            <CardTitle>Winner vs Runner-up Analysis</CardTitle>
-                            <CardDescription>
-                                Distribution of how many turns after the winner the next player would have won
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="mb-4">
-                                <p className="font-semibold">Average Turns Until Second Place Would Win</p>
-                                <p className="text-2xl">{(result.avgTurnsToSecond - result.avgTurns).toFixed(2)} turns after winner</p>
-                            </div>
-                            <div className="h-[400px]">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={result.turnDifferenceDistribution}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis
-                                            dataKey="difference"
-                                            label={{ value: 'Turns After Winner', position: 'bottom' }}
-                                        />
-                                        <YAxis
-                                            label={{ value: 'Percentage of Games', angle: -90, position: 'insideLeft' }}
-                                            tickFormatter={(value) => `${value.toFixed(1)}%`}
-                                        />
-                                        <Tooltip
-                                            formatter={(value: number) => [`${value.toFixed(1)}%`, 'Percentage of Games']}
-                                        />
-                                        <Bar dataKey="frequency" fill="#82ca9d" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </CardContent>
-                    </Card> */}
                 </>
             )}
         </div>
@@ -347,18 +313,29 @@ interface BingoGame {
     numbers: number[];
 }
 
-function makeBingoCard(): BingoCard {
+// Add this type and helper function
+type RandomFn = () => number;
+const defaultRandom: RandomFn = () => Math.random();
+
+// Modify makeBingoCard to accept random function
+export function makeBingoCard(random: RandomFn = defaultRandom): BingoCard {
     let card: number[] = []
     for (let i = 0; i < 5; i++) {
-        card = card.concat(Array.from({ length: 15 }, (_, j) => i * 15 + j + 1).sort(() => Math.random() - 0.5).slice(0, 5))
+        card = card.concat(
+            shuffle(Array.from({ length: 15 }, (_, j) => i * 15 + j + 1))
+                .slice(0, 5)
+        )
     }
-    return { numbers: card }
+    // Transpose the card
+    const transposedCard: number[][] = Array.from({ length: 5 }, (_, i) => card.filter((_, j) => j % 5 === i))
+    return { numbers: transposedCard.flat() }
 }
 
-function makeBingoGame(numPlayers: number): BingoGame {
+// Modify makeBingoGame to accept random function
+export function makeBingoGame(numPlayers: number, random: RandomFn = defaultRandom): BingoGame {
     return {
-        cards: Array.from({ length: numPlayers }, () => makeBingoCard()),
-        numbers: Array.from({ length: 75 }, (_, i) => i + 1).sort(() => Math.random() - 0.5)
+        cards: Array.from({ length: numPlayers }, () => makeBingoCard(random)),
+        numbers: shuffle(Array.from({ length: 75 }, (_, i) => i + 1))
     }
 }
 
@@ -527,7 +504,23 @@ const generateHeatMapData = cacheable()(function generateHeatMapData(simulation:
     
     const winTypeMap = new Map<string, number>()
     
-
+    // Get the average position of each number in each drawn sequence
+    const numberPositionMap = new Map<number, number[]>()
+    for (let i = 0; i < 75; i++) {
+        numberPositionMap.set(i + 1, [])
+    }
+    simulation.games.forEach(game => {
+        game.numbers.forEach((number, index) => {
+            numberPositionMap.get(number)?.push(index)
+        })
+    })
+    numberPositionMap.forEach((positions, number) => {
+        numberPositionMap.set(number, positions.reduce((acc, curr) => acc + curr, 0) / positions.length)
+    })
+    numberPositionMap.forEach((_, number) => {
+        console.log(`${number}: ${numberPositionMap.get(number)}`)
+    })
+    
     simulation.games.forEach(game => {
         const firstWinTurn = getFirstWinningTurn(game, options);
         
@@ -560,6 +553,7 @@ const generateHeatMapData = cacheable()(function generateHeatMapData(simulation:
         col: index % 5,
         frequency: frequency / totalWins
     }));
+    console.log(tiles)
 
     return {
         tiles,
