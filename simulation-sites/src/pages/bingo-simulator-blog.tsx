@@ -227,21 +227,21 @@ export default function BingoSimulatorBlog() {
 
                     <Card className="mt-8">
                         <CardHeader>
-                            <CardTitle>First Winning Player Distribution</CardTitle>
-                            <CardDescription>Distribution of which player wins first</CardDescription>
+                            <CardTitle>Turns Until Next Winner Distribution</CardTitle>
+                            <CardDescription>Distribution of how many additional turns it would take for the next player to win after the first winner</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <DistributionChart
                                 distributions={[
                                     {
                                         label: "Basic Rules",
-                                        distribution: getFirstWinningTileDistribution(activeSimulation, {
+                                        distribution: getTurnsUntilNextWinnerDistribution(activeSimulation, {
                                             checkCorners: false,
                                             useFreeSpace: false
                                         })
                                     },  
                                 ]}
-                                xLabel="Player Number"
+                                xLabel="Turns"
                                 yLabel="Percentage of Games"
                             />
                         </CardContent>
@@ -462,4 +462,21 @@ function getFirstWinningTileDistribution(simulation: BingoSimulation, options: S
         return firstWinIndex;
     });
     return makeDistribution(firstWinningTiles);
+}
+
+// Add this new function near the other analysis functions
+function getTurnsUntilNextWinnerDistribution(simulation: BingoSimulation, options: SimulationOptions): Distribution {
+    const turnDifferences = simulation.games.map(game => {
+        const winningTurns = getWinningTurnsForGame(game, options);
+        const firstWinTurns = Math.min(...winningTurns);
+        const firstWinnerIndex = winningTurns.indexOf(firstWinTurns);
+        
+        // Get the next best winning time excluding the winner
+        const nextBestTurns = Math.min(...winningTurns.filter((_, idx) => idx !== firstWinnerIndex));
+        
+        // Calculate difference in turns
+        return nextBestTurns - firstWinTurns;
+    });
+    
+    return makeDistribution(turnDifferences);
 }
