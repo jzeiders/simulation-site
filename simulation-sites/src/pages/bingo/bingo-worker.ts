@@ -1,4 +1,5 @@
-import { Distribution, makeDistribution } from '@/components/Distribution'
+// import { Distribution, makeDistribution } from '@/components/Distribution'
+import { Distribution, makeDistribution } from '@/components/Distribution';
 import { cacheable } from '@/lib/Cache'
 import { shuffle, uniqBy } from 'es-toolkit'
 
@@ -32,9 +33,21 @@ self.onmessage = async (e: MessageEvent) => {
             break;
 
         case 'ANALYZE_SIMULATION':
+            console.log(payload)
             const { simulation: simToAnalyze, options } = payload;
             const analysis = {
-                winningTurnDistribution: getWinningTurnDistribution(simToAnalyze, options),
+                winningTurnDistribution: getWinningTurnDistribution(simToAnalyze, {
+                    checkCorners: false,
+                    useFreeSpace: false
+                }),
+                withFreeSpace: getWinningTurnDistribution(simToAnalyze, {
+                    checkCorners: false,
+                    useFreeSpace: true
+                }),
+                withFreeSpaceAndCorners: getWinningTurnDistribution(simToAnalyze, {
+                    checkCorners: true,
+                    useFreeSpace: true
+                }),
                 turnsUntilNextWinner: getTurnsUntilNextWinnerDistribution(simToAnalyze, options),
                 heatMapData: generateHeatMapData(simToAnalyze, options)
             };
@@ -320,3 +333,16 @@ interface TilePosition {
 
 // Add to exports
 export { getWinTypes, getWinningTileIndices }
+
+// Add near the top with other interfaces
+interface HeatMapData {
+    tiles: {
+        row: number;
+        col: number;
+        frequency: number;
+    }[];
+    maxFrequency: number;
+}
+
+// Add near other exports
+export type { HeatMapData }

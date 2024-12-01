@@ -1,14 +1,13 @@
 'use client'
 
-import { Distribution, DistributionChart, getAvgValue, getMaxValue, getMinValue, makeDistribution } from '@/components/Distribution'
+import { Distribution, getAvgValue, getMaxValue, getMinValue } from "@/components/Distribution"
+import { DistributionChart } from "@/components/DistributionChart"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
-import { useMemo, useState, useCallback, useEffect, useRef } from 'react'
-import { cacheable } from '@/lib/Cache';
-import { shuffle, uniqBy } from 'es-toolkit'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BingoSimulation, getNumGames, getNumPlayers, makeSimulation } from './bingo-worker'
 
 interface WinningTile {
@@ -20,11 +19,6 @@ interface WinningTile {
 interface HeatMapData {
     tiles: WinningTile[];
     maxFrequency: number;
-}
-
-interface SimulationOptions {
-    checkCorners: boolean;
-    useFreeSpace: boolean;
 }
 
 interface SimulationAnalysis {
@@ -65,22 +59,38 @@ export default function BingoSimulatorBlog() {
     const [numGames, setNumGames] = useState(10000);
     const [numPlayers, setNumPlayers] = useState(10);
     const [isLoading, setIsLoading] = useState(false);
+    
+    const worker = useMemo(() => {
+        return new Worker(
+            new URL('./bingo-worker.ts', import.meta.url),
+            { type: 'module' }
+        );
+    }, [])
+    console.log(worker)
 
     const activeSimulation = useMemo(() =>
         simulations[activeSimulationIdx],
         [simulations, activeSimulationIdx]
     );
+    
+    useEffect(() => {
+        setAnalysis(null)
+        worker.postMessage({
+            type: 'ANALYZE_SIMULATION',
+            payload: {
+                simulation: activeSimulation,
+                options: {
+                    checkCorners: false,
+                    useFreeSpace: false
+                }
+            }
+        })
+    }, [activeSimulation])
 
-    const workerRef = useRef<Worker>();
     const [analysis, setAnalysis] = useState<SimulationAnalysis | null>(null);
 
     useEffect(() => {
-        workerRef.current = new Worker(
-            new URL('../workers/bingo-worker.ts', import.meta.url),
-            { type: 'module' }
-        );
-
-        workerRef.current.onmessage = (e) => {
+        worker.onmessage = (e) => {
             const { type, payload } = e.data;
             
             switch (type) {
@@ -92,25 +102,14 @@ export default function BingoSimulatorBlog() {
                     
                 case 'ANALYSIS_COMPLETE':
                     setAnalysis(payload);
+                    console.log(payload)
                     break;
             }
         };
-
-        return () => workerRef.current?.terminate();
-    }, []);
-
-    const runSimulation = useCallback(() => {
-        setIsLoading(true);
-        workerRef.current?.postMessage({
-            type: 'RUN_SIMULATION',
-            payload: { numGames, numPlayers }
-        });
-    }, [numGames, numPlayers]);
-
-    useEffect(() => {
-        if (!activeSimulation) return;
-
-        workerRef.current?.postMessage({
+        worker.onerror = (e) => {
+            console.error(e)
+        }
+        worker.postMessage({
             type: 'ANALYZE_SIMULATION',
             payload: {
                 simulation: activeSimulation,
@@ -119,18 +118,18 @@ export default function BingoSimulatorBlog() {
                     useFreeSpace: false
                 }
             }
-        });
-    }, [activeSimulation]);
+        })
 
-    const simulationDistribution = useMemo(() => {
-        if (!activeSimulation) {
-            return null;
-        }
-        return getWinningTurnDistribution(activeSimulation, {
-            checkCorners: false,
-            useFreeSpace: false
+        return () => worker.terminate();
+    }, []);
+
+    const runSimulation = useCallback(() => {
+        setIsLoading(true);
+        worker.postMessage({
+            type: 'RUN_SIMULATION',
+            payload: { numGames, numPlayers }
         });
-    }, [activeSimulation]);
+    }, [numGames, numPlayers]);
 
     const simulationSelector = (
         <div className="mb-4">
@@ -149,10 +148,6 @@ export default function BingoSimulatorBlog() {
             </select>
         </div>
     );
-
-    const minTurns = analysis?.winningTurnDistribution ? getMinValue(analysis.winningTurnDistribution) : 0;
-    const maxTurns = analysis?.winningTurnDistribution ? getMaxValue(analysis.winningTurnDistribution) : 0;
-    const avgTurns = analysis?.winningTurnDistribution ? getAvgValue(analysis.winningTurnDistribution) : 0;
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -224,15 +219,15 @@ export default function BingoSimulatorBlog() {
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
                                     <p className="font-semibold">Average Turns to Win</p>
-                                    <p className="text-2xl">{avgTurns.toFixed(2)}</p>
+                                    <p className="text-2xl">{analysis?.winningTurnDistribution ? getAvgValue(analysis.winningTurnDistribution) : 0}</p>
                                 </div>
                                 <div>
                                     <p className="font-semibold">Minimum Turns to Win</p>
-                                    <p className="text-2xl">{minTurns}</p>
+                                    <p className="text-2xl">{analysis?.winningTurnDistribution ? getMinValue(analysis.winningTurnDistribution) : 0}</p>
                                 </div>
                                 <div>
                                     <p className="font-semibold">Maximum Turns to Win</p>
-                                    <p className="text-2xl">{maxTurns}</p>
+                                    <p className="text-2xl">{analysis?.winningTurnDistribution ? getMaxValue(analysis.winningTurnDistribution) : 0}</p>
                                 </div>
                             </div>
                         </CardContent>
@@ -244,32 +239,24 @@ export default function BingoSimulatorBlog() {
                             <CardDescription>Histogram showing the frequency of games won in a certain number of turns under different rules</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            {analysis && (
-                                <DistributionChart
-                                    distributions={[
-                                        {
-                                            label: "Basic Rules",
-                                            distribution: analysis.winningTurnDistribution
-                                        },
-                                        {
-                                            label: "With Free Space",
-                                            distribution: getWinningTurnDistribution(activeSimulation, {
-                                                checkCorners: false,
-                                                useFreeSpace: true
-                                            })
-                                        },
-                                        {
-                                            label: "Free Space & Corners",
-                                            distribution: getWinningTurnDistribution(activeSimulation, {
-                                                checkCorners: true,
-                                                useFreeSpace: true
-                                            })
-                                        }
-                                    ]}
-                                    xLabel="Number of Turns"
-                                    yLabel="Percentage of Games"
-                                />
-                            )}
+                            <DistributionChart
+                                distributions={[
+                                    {
+                                        label: "Basic Rules",
+                                        distribution: analysis?.winningTurnDistribution
+                                    },
+                                    {
+                                        label: "With Free Space",
+                                        distribution: analysis?.winningTurnDistribution
+                                    },
+                                    {
+                                        label: "Free Space & Corners",
+                                        distribution: analysis?.winningTurnDistribution
+                                    }
+                                ].filter(d => d.distribution) as { label: string, distribution: Distribution }[]}
+                                xLabel="Number of Turns"
+                                yLabel="Percentage of Games"
+                            />
                         </CardContent>
                     </Card>
 
@@ -283,12 +270,9 @@ export default function BingoSimulatorBlog() {
                                 distributions={[
                                     {
                                         label: "Basic Rules",
-                                        distribution: analysis?.turnsUntilNextWinner ? analysis.turnsUntilNextWinner : getTurnsUntilNextWinnerDistribution(activeSimulation, {
-                                            checkCorners: false,
-                                            useFreeSpace: false
-                                        })
+                                        distribution: analysis?.turnsUntilNextWinner
                                     },  
-                                ]}
+                                ].filter(d => d.distribution) as { label: string, distribution: Distribution }[]}
                                 xLabel="Turns"
                                 yLabel="Percentage of Games"
                             />

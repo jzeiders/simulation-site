@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { makeBingoCard, makeBingoGame } from './bingo-simulator-blog'
-import { getWinTypes, getWinningTileIndices } from './bingo-worker'
+import { getWinTypes, getWinningTileIndices, makeBingoCard, makeBingoGame } from './bingo-worker'
 
 describe('Bingo Win Conditions', () => {
     // Helper function to create a test card with specific numbers
