@@ -83,7 +83,7 @@ export function cacheable(options: CacheOptions = {
 
     // Copy over properties of the original function
     Object.defineProperty(cachedFunction, 'name', { value: target.name });
-    return cachedFunction;
+    return cachedFunction as unknown as T;
   };
 }
 
