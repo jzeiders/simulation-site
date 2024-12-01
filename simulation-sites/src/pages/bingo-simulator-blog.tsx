@@ -1,24 +1,12 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { Distribution, DistributionChart, getAvgValue, getMaxValue, getMinValue, makeDistribution } from '@/components/Distribution'
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { cn } from "@/lib/utils"
-import assert from 'assert'
-import { Distribution, DistributionChart, makeDistribution, getMinValue, getMaxValue, getAvgValue } from '@/components/Distribution';
-
-interface SimulationResult {
-    avgTurns: number;
-    minTurns: number;
-    maxTurns: number;
-    distribution: { turns: number; frequency: number }[];
-    heatMap: HeatMapData;
-    avgTurnsToSecond: number;
-    turnDifferenceDistribution: { difference: number; frequency: number }[];
-}
+import { useMemo, useState } from 'react'
 
 interface WinningTile {
     row: number;
@@ -35,7 +23,6 @@ interface SimulationOptions {
     checkCorners: boolean;
     useFreeSpace: boolean;
 }
-
 function BingoHeatMap({ heatMap }: { heatMap: HeatMapData }) {
     return (
         <div className="grid grid-cols-5 gap-1 w-full max-w-md mx-auto">
@@ -60,35 +47,61 @@ function BingoHeatMap({ heatMap }: { heatMap: HeatMapData }) {
 }
 
 export default function BingoSimulatorBlog() {
-    const [numGames, setNumGames] = useState(10000)
-    const [numPlayers, setNumPlayers] = useState(10)
-    const [simulation, setSimulation] = useState<BingoSimulation | null>(null)
-    const [options, setOptions] = useState<SimulationOptions>({
-        checkCorners: true,
-        useFreeSpace: true
-    })
+    const [simulations, setSimulations] = useState<BingoSimulation[]>(() => {
+        return [makeSimulation(1000, 4)];
+    });
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [activeSimulationIdx, setActiveSimulationIdx] = useState<number>(0);
+    const [numGames, setNumGames] = useState(10000);
+    const [numPlayers, setNumPlayers] = useState(10);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const runSimulation = () => {
-        setIsLoading(true)
-        const simulation = makeSimulation(numGames, numPlayers)
-        setSimulation(simulation)
-        setIsLoading(false)
-    }
-    
+    const activeSimulation = useMemo(() =>
+        simulations[activeSimulationIdx],
+        [simulations, activeSimulationIdx]
+    );
+
+    const runSimulation = async () => {
+        setIsLoading(true);
+        (async () => {
+            const newSimulation = makeSimulation(numGames, numPlayers);
+            setSimulations(prev => [...prev, newSimulation]);
+            setActiveSimulationIdx(prev => prev + 1);
+            setIsLoading(false);
+        })()
+    };
 
     const simulationDistribution = useMemo(() => {
-        if (!simulation) {
-            return null
+        if (!activeSimulation) {
+            return null;
         }
-        return getWinningTurnDistribution(simulation, options)
-    }, [simulation, options])
-    
+        return getWinningTurnDistribution(activeSimulation, {
+            checkCorners: false,
+            useFreeSpace: false
+        });
+    }, [activeSimulation]);
 
-    const minTurns = simulationDistribution ? getMinValue(simulationDistribution) : 0
-    const maxTurns = simulationDistribution ? getMaxValue(simulationDistribution) : 0
-    const avgTurns = simulationDistribution ? getAvgValue(simulationDistribution) : 0
+    const simulationSelector = (
+        <div className="mb-4">
+            <Label htmlFor="simulationSelect">Select Simulation</Label>
+            <select
+                id="simulationSelect"
+                value={activeSimulationIdx}
+                onChange={(e) => setActiveSimulationIdx(parseInt(e.target.value))}
+                className="w-full p-2 border rounded-md"
+            >
+                {simulations.map((sim, i) => (
+                    <option key={i} value={i}>
+                        Simulation {i} ({getNumGames(sim)} games, {getNumPlayers(sim)} players)
+                    </option>
+                ))}
+            </select>
+        </div>
+    );
+
+    const minTurns = simulationDistribution ? getMinValue(simulationDistribution) : 0;
+    const maxTurns = simulationDistribution ? getMaxValue(simulationDistribution) : 0;
+    const avgTurns = simulationDistribution ? getAvgValue(simulationDistribution) : 0;
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -103,6 +116,7 @@ export default function BingoSimulatorBlog() {
                     <CardDescription>Adjust the simulation settings</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    {simulationSelector}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div className="space-y-2">
                             <Label htmlFor="numGames">Number of Games</Label>
@@ -127,34 +141,6 @@ export default function BingoSimulatorBlog() {
                             />
                         </div>
                     </div>
-                    <div className="space-y-4">
-                        <div className="flex items-center space-x-2">
-                            <input
-                                type="checkbox"
-                                id="checkCorners"
-                                checked={options.checkCorners}
-                                onChange={(e) => setOptions(prev => ({
-                                    ...prev,
-                                    checkCorners: e.target.checked
-                                }))}
-                                className="h-4 w-4 rounded border-gray-300"
-                            />
-                            <Label htmlFor="checkCorners">Check Corners as Win Condition</Label>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                            <input
-                                type="checkbox"
-                                id="useFreeSpace"
-                                checked={options.useFreeSpace}
-                                onChange={(e) => setOptions(prev => ({
-                                    ...prev,
-                                    useFreeSpace: e.target.checked
-                                }))}
-                                className="h-4 w-4 rounded border-gray-300"
-                            />
-                            <Label htmlFor="useFreeSpace">Use Free Space (Center)</Label>
-                        </div>
-                    </div>
                 </CardContent>
                 <CardFooter>
                     <Button
@@ -164,24 +150,24 @@ export default function BingoSimulatorBlog() {
                     >
                         {isLoading ? (
                             <>
-                                <span className="opacity-0">Run Simulation</span>
+                                <span className="opacity-0">Create New Simulation</span>
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <div className="w-4 h-4 border-2 border-r-transparent border-white rounded-full animate-spin" />
                                 </div>
                             </>
                         ) : (
-                            'Run Simulation'
+                            'Create New Simulation'
                         )}
                     </Button>
                 </CardFooter>
             </Card>
 
-            {simulation && (
+            {activeSimulation && (
                 <>
                     <Card className="mb-8">
                         <CardHeader>
                             <CardTitle>Simulation Results</CardTitle>
-                            <CardDescription>Statistics from {numGames} games with {numPlayers} players</CardDescription>
+                            <CardDescription>Statistics from {getNumGames(activeSimulation)} games with {getNumPlayers(activeSimulation)} players</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -208,7 +194,7 @@ export default function BingoSimulatorBlog() {
                         </CardHeader>
                         <CardContent>
                             {simulationDistribution && (
-                                <DistributionChart 
+                                <DistributionChart
                                     distribution={simulationDistribution}
                                     xLabel="Number of Turns"
                                     yLabel="Percentage of Games"
@@ -223,8 +209,11 @@ export default function BingoSimulatorBlog() {
                             <CardDescription>Distribution of which player wins first</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <DistributionChart 
-                                distribution={getFirstWinningTileDistribution(simulation, options)}
+                            <DistributionChart
+                                distribution={getFirstWinningTileDistribution(activeSimulation, {
+                                    checkCorners: false,
+                                    useFreeSpace: false
+                                })}
                                 xLabel="Player Number"
                                 yLabel="Percentage of Games"
                                 barColor="#82ca9d"
@@ -289,6 +278,17 @@ interface BingoSimulation {
     games: BingoGame[];
     playerCount: number;
 }
+function getNumGames(simulation: BingoSimulation): number {
+    return simulation.games.length;
+}
+function getNumPlayers(simulation: BingoSimulation): number {
+    return simulation.playerCount;
+}
+
+interface AnalysisOptions {
+    checkCorners: boolean;
+    useFreeSpace: boolean;
+}
 
 
 function makeSimulation(numGames: number, numPlayers: number): BingoSimulation {
@@ -298,7 +298,7 @@ function makeSimulation(numGames: number, numPlayers: number): BingoSimulation {
     }
 }
 // Bingo Simulation Analysis
-function getWinningTurnDistribution(simulation: BingoSimulation, options: SimulationOptions): Distribution {
+function getWinningTurnDistribution(simulation: BingoSimulation, options: AnalysisOptions): Distribution {
     const winningTurnsByGame = simulation.games.map(game => getWinningTurnsForGame(game, options)).map(turns => Math.min(...turns))
     return makeDistribution(winningTurnsByGame)
 }
@@ -329,7 +329,7 @@ function makeBingoGame(numPlayers: number): BingoGame {
 }
 
 // This function returns an array of the number of turns it took for each player to win
-function getWinningTurnsForGame(game: BingoGame, options: SimulationOptions): number[] {
+function getWinningTurnsForGame(game: BingoGame, options: AnalysisOptions): number[] {
     const winningTurns = game.cards.map(() => 76)
 
     for (let i = 0; i < game.numbers.length; i++) {
@@ -369,7 +369,7 @@ type WinType = WinTypeRow | WinTypeCol | WinTypeDiagonal | WinTypeFourCorners
 function getWinTypes(
     card: BingoCard,
     drawnNumbers: number[],
-    options: SimulationOptions
+    options: AnalysisOptions
 ): WinType[] {
     const size = 5;
     const marked = new Array(25).fill(false);
