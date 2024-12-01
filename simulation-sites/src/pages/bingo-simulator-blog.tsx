@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { cn } from "@/lib/utils"
 import assert from 'assert'
+import { Distribution, DistributionChart, makeDistribution, getMinValue, getMaxValue, getAvgValue } from '@/components/Distribution';
 
 interface SimulationResult {
     avgTurns: number;
@@ -206,25 +207,28 @@ export default function BingoSimulatorBlog() {
                             <CardDescription>Histogram showing the frequency of games won in a certain number of turns</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <div className="h-[400px]">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={simulationDistribution}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis
-                                            dataKey="turns"
-                                            label={{ value: 'Number of Turns', position: 'bottom' }}
-                                        />
-                                        <YAxis
-                                            label={{ value: 'Percentage of Games', angle: -90, position: 'insideLeft' }}
-                                            tickFormatter={(value) => `${value.toFixed(1)}%`}
-                                        />
-                                        <Tooltip
-                                            formatter={(value: number) => [`${value.toFixed(1)}%`, 'Percentage of Games']}
-                                        />
-                                        <Bar dataKey="frequency" fill="#8884d8" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
+                            {simulationDistribution && (
+                                <DistributionChart 
+                                    distribution={simulationDistribution}
+                                    xLabel="Number of Turns"
+                                    yLabel="Percentage of Games"
+                                />
+                            )}
+                        </CardContent>
+                    </Card>
+
+                    <Card className="mt-8">
+                        <CardHeader>
+                            <CardTitle>First Winning Player Distribution</CardTitle>
+                            <CardDescription>Distribution of which player wins first</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <DistributionChart 
+                                distribution={getFirstWinningTileDistribution(simulation, options)}
+                                xLabel="Player Number"
+                                yLabel="Percentage of Games"
+                                barColor="#82ca9d"
+                            />
                         </CardContent>
                     </Card>
 
@@ -277,31 +281,6 @@ export default function BingoSimulatorBlog() {
             )}
         </div>
     )
-}
-
-
-
-// Generic Distirbution Code
-interface Distribution {
-    values: Map<number, number>;
-}
-function makeDistribution(values: number[]): Distribution {
-    const distribution = new Map<number, number>()
-    for (const value of values) {
-        distribution.set(value, (distribution.get(value) || 0) + 1)
-    }
-    return {
-        values: distribution
-    }
-}
-function getMinValue(distribution: Distribution): number {
-    return Math.min(...Array.from(distribution.values.keys()))
-}
-function getMaxValue(distribution: Distribution): number {
-    return Math.max(...Array.from(distribution.values.keys()))
-}
-function getAvgValue(distribution: Distribution): number {
-    return Array.from(distribution.values.entries()).reduce((acc, [value, count]) => acc + value * count, 0) / Array.from(distribution.values.values()).reduce((a, b) => a + b, 0)
 }
 
 
@@ -448,3 +427,13 @@ function getWinTypes(
 
 // Make sure to export the function for testing
 export { getWinTypes }
+
+// Add this function to get the first winning tile distribution
+function getFirstWinningTileDistribution(simulation: BingoSimulation, options: SimulationOptions): Distribution {
+    const firstWinningTiles = simulation.games.map(game => {
+        const winningTurns = getWinningTurnsForGame(game, options);
+        const firstWinIndex = winningTurns.indexOf(Math.min(...winningTurns));
+        return firstWinIndex;
+    });
+    return makeDistribution(firstWinningTiles);
+}
