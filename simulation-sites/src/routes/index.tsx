@@ -11,13 +11,13 @@ const articles = [
     title: "Bingo Simulator",
     description: "Explore the probabilities and patterns in Bingo games through interactive simulations.",
     link: "/bingo",
-    date: "March 2024"
+    date: "December 1st, 2024"
   },
   {
     title: "Advent of Code 2024",
     description: "Solutions and explanations for Advent of Code 2024 programming challenges.",
     link: "/advent2024",
-    date: "March 2024"
+    date: "December 2nd, 2024"
   }
 ]
 
