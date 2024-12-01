@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import { useMemo, useState } from 'react'
+import { cacheable } from '@/lib/Cache';
+import { uniqBy } from 'es-toolkit'
 
 interface WinningTile {
     row: number;
@@ -38,7 +40,7 @@ function BingoHeatMap({ heatMap }: { heatMap: HeatMapData }) {
                     }}
                 >
                     <span className="text-black">
-                        {((tile.frequency / heatMap.maxFrequency) * 100).toFixed(1)}%
+                        {((tile.frequency) * 100).toFixed(1)}%
                     </span>
                 </div>
             ))}
@@ -247,7 +249,7 @@ export default function BingoSimulatorBlog() {
                         </CardContent>
                     </Card>
 
-                    {/* <Card className="mt-8">
+                    <Card className="mt-8">
                         <CardHeader>
                             <CardTitle>Winning Numbers Heat Map</CardTitle>
                             <CardDescription>
@@ -255,9 +257,14 @@ export default function BingoSimulatorBlog() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <BingoHeatMap heatMap={simulation.heatMap} />
+                            <BingoHeatMap 
+                                heatMap={generateHeatMapData(activeSimulation, {
+                                    checkCorners: false,
+                                    useFreeSpace: false
+                                })} 
+                            />
                         </CardContent>
-                    </Card> */}
+                    </Card>
 
                     {/* <Card className="mt-8">
                         <CardHeader>
@@ -317,17 +324,18 @@ interface AnalysisOptions {
 }
 
 
-function makeSimulation(numGames: number, numPlayers: number): BingoSimulation {
+const makeSimulation = function makeSimulation(numGames: number, numPlayers: number): BingoSimulation {
     return {
         games: Array.from({ length: numGames }, () => makeBingoGame(numPlayers)),
         playerCount: numPlayers
     }
 }
+
 // Bingo Simulation Analysis
-function getWinningTurnDistribution(simulation: BingoSimulation, options: AnalysisOptions): Distribution {
-    const winningTurnsByGame = simulation.games.map(game => getWinningTurnsForGame(game, options)).map(turns => Math.min(...turns))
+const getWinningTurnDistribution = cacheable()(function getWinningTurnDistribution(simulation: BingoSimulation, options: AnalysisOptions): Distribution {
+    const winningTurnsByGame = simulation.games.map(game => getFirstWinningTurn(game, options))
     return makeDistribution(winningTurnsByGame)
-}
+});
 
 
 // The core bingo logic
@@ -355,7 +363,7 @@ function makeBingoGame(numPlayers: number): BingoGame {
 }
 
 // This function returns an array of the number of turns it took for each player to win
-function getWinningTurnsForGame(game: BingoGame, options: AnalysisOptions): number[] {
+const getWinningTurnsForGame = cacheable()(function getWinningTurnsForGame(game: BingoGame, options: AnalysisOptions): number[] {
     const winningTurns = game.cards.map(() => 76)
 
     for (let i = 0; i < game.numbers.length; i++) {
@@ -371,7 +379,24 @@ function getWinningTurnsForGame(game: BingoGame, options: AnalysisOptions): numb
     }
 
     return winningTurns
-}
+});
+
+const getFirstWinningTurn = cacheable()(function getFirstWinningTurn(game: BingoGame, options: AnalysisOptions): number {
+    const winningTurns = getWinningTurnsForGame(game, options)
+    return Math.min(...winningTurns)
+});
+
+const getFirstWinnerCard = cacheable()(function getFirstWinnerCard(game: BingoGame, options: AnalysisOptions): BingoCard {
+    const firstWinTurn = getFirstWinningTurn(game, options)
+    const winningTurns = getWinningTurnsForGame(game, options)
+    return game.cards[winningTurns.indexOf(firstWinTurn)]
+});
+
+const getNextWinningTurn = cacheable()(function getNextWinningTurn(game: BingoGame, options: AnalysisOptions): number {
+    const winningTurns = getWinningTurnsForGame(game, options)
+    const firstWinTurn = Math.min(...winningTurns)
+    return Math.min(...winningTurns.filter(turn => turn > firstWinTurn))
+});
 
 interface WinTypeRow {
     type: 'row'
@@ -451,32 +476,96 @@ function getWinTypes(
     return winTypes
 }
 
-// Make sure to export the function for testing
-export { getWinTypes }
 
-// Add this function to get the first winning tile distribution
-function getFirstWinningTileDistribution(simulation: BingoSimulation, options: SimulationOptions): Distribution {
-    const firstWinningTiles = simulation.games.map(game => {
-        const winningTurns = getWinningTurnsForGame(game, options);
-        const firstWinIndex = winningTurns.indexOf(Math.min(...winningTurns));
-        return firstWinIndex;
-    });
-    return makeDistribution(firstWinningTiles);
-}
-
-// Add this new function near the other analysis functions
-function getTurnsUntilNextWinnerDistribution(simulation: BingoSimulation, options: SimulationOptions): Distribution {
+const getTurnsUntilNextWinnerDistribution = cacheable()(function getTurnsUntilNextWinnerDistribution(simulation: BingoSimulation, options: SimulationOptions): Distribution {
     const turnDifferences = simulation.games.map(game => {
-        const winningTurns = getWinningTurnsForGame(game, options);
-        const firstWinTurns = Math.min(...winningTurns);
-        const firstWinnerIndex = winningTurns.indexOf(firstWinTurns);
-        
-        // Get the next best winning time excluding the winner
-        const nextBestTurns = Math.min(...winningTurns.filter((_, idx) => idx !== firstWinnerIndex));
-        
-        // Calculate difference in turns
-        return nextBestTurns - firstWinTurns;
+        const firstWinTurn = getFirstWinningTurn(game, options);
+        const nextWinTurn = getNextWinningTurn(game, options);
+        return nextWinTurn - firstWinTurn;
     });
     
     return makeDistribution(turnDifferences);
+});
+
+// Add these interfaces near the other interfaces
+interface TilePosition {
+    row: number;
+    col: number;
 }
+
+// Add this function near getWinTypes
+function getWinningTileIndices(winType: WinType): TilePosition[] {
+    switch (winType.type) {
+        case 'row':
+            return Array.from({ length: 5 }, (_, col) => ({
+                row: winType.row,
+                col
+            }));
+        case 'col':
+            return Array.from({ length: 5 }, (_, row) => ({
+                row,
+                col: winType.col
+            }));
+        case 'diagonal':
+            return Array.from({ length: 5 }, (_, i) => ({
+                row: i,
+                col: winType.direction === 'left' ? i : 4 - i
+            }));
+        case 'fourCorners':
+            return [
+                { row: 0, col: 0 },
+                { row: 0, col: 4 },
+                { row: 4, col: 0 },
+                { row: 4, col: 4 }
+            ];
+    }
+}
+
+const generateHeatMapData = cacheable()(function generateHeatMapData(simulation: BingoSimulation, options: SimulationOptions): HeatMapData {
+    const tileFrequency = new Array(25).fill(0);
+    let totalWins = 0;
+    
+    const winTypeMap = new Map<string, number>()
+    
+
+    simulation.games.forEach(game => {
+        const firstWinTurn = getFirstWinningTurn(game, options);
+        
+        // Get the winning card and its numbers at the winning turn
+        const winningCard = getFirstWinnerCard(game, options);
+        const drawnNumbers = game.numbers.slice(0, firstWinTurn);
+        const winTypes = getWinTypes(winningCard, drawnNumbers, options);
+
+        winTypes.forEach(winType => {
+            const winTypeKey = JSON.stringify(winType);
+            winTypeMap.set(winTypeKey, (winTypeMap.get(winTypeKey) || 0) + 1);
+        });
+
+        // For each win type, increment the frequency of the winning tiles
+        winTypes.forEach(winType => {
+            const indices = uniqBy(getWinningTileIndices(winType), ({ row, col }) => row * 5 + col)
+            indices.forEach(({ row, col }) => {
+                tileFrequency[row * 5 + col]++;
+            });
+            totalWins++;
+        });
+    });
+    
+    console.log(winTypeMap)
+
+    // Convert to the required format
+    const maxFrequency = Math.max(...tileFrequency);
+    const tiles = tileFrequency.map((frequency, index) => ({
+        row: Math.floor(index / 5),
+        col: index % 5,
+        frequency: frequency / totalWins
+    }));
+
+    return {
+        tiles,
+        maxFrequency: maxFrequency / totalWins
+    };
+});
+
+// Add to exports
+export { getWinTypes, getWinningTileIndices }
