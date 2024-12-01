@@ -2,27 +2,24 @@ import { Solution, runSolution } from '../common/SolutionRunner'
 import { SolutionCard } from '../common/SolutionCard'
 
 const solution: Solution<any, number> = {
-    parseInput: (content: string): any => {
+    parseInput: (_content: string): any => {
         // TODO: Implement parsing logic
         return [];
     },
 
-    part1: (input: any): number => {
+    part1: (_input: any): number => {
         // TODO: Implement part 1
         return 0;
     },
 
-    part2: (input: any): number => {
+    part2: (_input: any): number => {
         // TODO: Implement part 2
         return 0;
     },
 
     explanation: {
         part1: "Coming soon...",
-        steps: [
-            "Step 1 placeholder",
-            "Step 2 placeholder"
-        ]
+        part2: "Coming soon..."
     },
 
     testCases: {
