@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-        working-directory: ./simulation-sites
+          cache-dependency-path: ./simulation-sites/package-lock.json
           
       - name: Install Dependencies
         run: npm ci
