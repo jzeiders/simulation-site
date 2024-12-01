@@ -14,6 +14,8 @@ interface SimulationResult {
     maxTurns: number;
     distribution: { turns: number; frequency: number }[];
     heatMap: HeatMapData;
+    avgTurnsToSecond: number;
+    turnDifferenceDistribution: { difference: number; frequency: number }[];
 }
 
 interface WinningTile {
@@ -25,6 +27,11 @@ interface WinningTile {
 interface HeatMapData {
     tiles: WinningTile[];
     maxFrequency: number;
+}
+
+interface SimulationOptions {
+    checkCorners: boolean;
+    useFreeSpace: boolean;
 }
 
 function BingoHeatMap({ heatMap }: { heatMap: HeatMapData }) {
@@ -53,20 +60,41 @@ function BingoHeatMap({ heatMap }: { heatMap: HeatMapData }) {
 export default function BingoSimulatorBlog() {
     const [numGames, setNumGames] = useState(10000)
     const [numPlayers, setNumPlayers] = useState(10)
+    const [options, setOptions] = useState<SimulationOptions>({
+        checkCorners: true,
+        useFreeSpace: true
+    })
     const [result, setResult] = useState<SimulationResult | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
     const runSimulation = () => {
         setIsLoading(true)
         try {
-            const results = simulateGames(numGames, numPlayers)
+            const results = simulateGames(numGames, numPlayers, options)
 
             const turns = results.map(r => r.turns)
             const avgTurns = turns.reduce((a, b) => a + b, 0) / turns.length
             const minTurns = Math.min(...turns)
             const maxTurns = Math.max(...turns)
 
-            // Calculate distribution
+            // Calculate turn differences and average turns to second
+            const turnDifferences = results.map(r => r.turnsToSecond - r.turns)
+            const avgTurnsToSecond = results.map(r => r.turnsToSecond).reduce((a, b) => a + b, 0) / results.length
+
+            // Calculate turn difference distribution with percentages
+            const turnDiffDistribution = turnDifferences.reduce((acc, diff) => {
+                acc[diff] = (acc[diff] || 0) + 1
+                return acc
+            }, {} as Record<number, number>)
+
+            const turnDifferenceDistribution = Object.entries(turnDiffDistribution)
+                .map(([difference, frequency]) => ({
+                    difference: parseInt(difference),
+                    frequency: (frequency / numGames) * 100  // Convert to percentage
+                }))
+                .sort((a, b) => a.difference - b.difference)
+
+            // Calculate distribution with percentages
             const distribution = turns.reduce((acc, turns) => {
                 acc[turns] = (acc[turns] || 0) + 1
                 return acc
@@ -74,7 +102,7 @@ export default function BingoSimulatorBlog() {
 
             const distributionArray = Object.entries(distribution).map(([turns, frequency]) => ({
                 turns: parseInt(turns),
-                frequency
+                frequency: (frequency / numGames) * 100  // Convert to percentage
             }))
 
             // Calculate position frequency
@@ -106,7 +134,9 @@ export default function BingoSimulatorBlog() {
                 heatMap: {
                     tiles,
                     maxFrequency
-                }
+                },
+                avgTurnsToSecond,
+                turnDifferenceDistribution
             })
         } catch (error) {
             console.error('Error running simulation:', error)
@@ -124,10 +154,10 @@ export default function BingoSimulatorBlog() {
             <Card className="mb-8">
                 <CardHeader>
                     <CardTitle>Simulation Parameters</CardTitle>
-                    <CardDescription>Adjust the number of games and players for the simulation</CardDescription>
+                    <CardDescription>Adjust the simulation settings</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div className="space-y-2">
                             <Label htmlFor="numGames">Number of Games</Label>
                             <Input
@@ -149,6 +179,34 @@ export default function BingoSimulatorBlog() {
                                 min={1}
                                 max={100}
                             />
+                        </div>
+                    </div>
+                    <div className="space-y-4">
+                        <div className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="checkCorners"
+                                checked={options.checkCorners}
+                                onChange={(e) => setOptions(prev => ({
+                                    ...prev,
+                                    checkCorners: e.target.checked
+                                }))}
+                                className="h-4 w-4 rounded border-gray-300"
+                            />
+                            <Label htmlFor="checkCorners">Check Corners as Win Condition</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                id="useFreeSpace"
+                                checked={options.useFreeSpace}
+                                onChange={(e) => setOptions(prev => ({
+                                    ...prev,
+                                    useFreeSpace: e.target.checked
+                                }))}
+                                className="h-4 w-4 rounded border-gray-300"
+                            />
+                            <Label htmlFor="useFreeSpace">Use Free Space (Center)</Label>
                         </div>
                     </div>
                 </CardContent>
@@ -207,9 +265,17 @@ export default function BingoSimulatorBlog() {
                                 <ResponsiveContainer width="100%" height="100%">
                                     <BarChart data={result.distribution}>
                                         <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="turns" />
-                                        <YAxis />
-                                        <Tooltip />
+                                        <XAxis 
+                                            dataKey="turns" 
+                                            label={{ value: 'Number of Turns', position: 'bottom' }}
+                                        />
+                                        <YAxis 
+                                            label={{ value: 'Percentage of Games', angle: -90, position: 'insideLeft' }}
+                                            tickFormatter={(value) => `${value.toFixed(1)}%`}
+                                        />
+                                        <Tooltip 
+                                            formatter={(value: number) => [`${value.toFixed(1)}%`, 'Percentage of Games']}
+                                        />
                                         <Bar dataKey="frequency" fill="#8884d8" />
                                     </BarChart>
                                 </ResponsiveContainer>
@@ -228,19 +294,78 @@ export default function BingoSimulatorBlog() {
                             <BingoHeatMap heatMap={result.heatMap} />
                         </CardContent>
                     </Card>
+
+                    <Card className="mt-8">
+                        <CardHeader>
+                            <CardTitle>Winner vs Runner-up Analysis</CardTitle>
+                            <CardDescription>
+                                Distribution of how many turns after the winner the next player would have won
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="mb-4">
+                                <p className="font-semibold">Average Turns Until Second Place Would Win</p>
+                                <p className="text-2xl">{(result.avgTurnsToSecond - result.avgTurns).toFixed(2)} turns after winner</p>
+                            </div>
+                            <div className="h-[400px]">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={result.turnDifferenceDistribution}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis 
+                                            dataKey="difference" 
+                                            label={{ value: 'Turns After Winner', position: 'bottom' }} 
+                                        />
+                                        <YAxis 
+                                            label={{ value: 'Percentage of Games', angle: -90, position: 'insideLeft' }}
+                                            tickFormatter={(value) => `${value.toFixed(1)}%`}
+                                        />
+                                        <Tooltip 
+                                            formatter={(value: number) => [`${value.toFixed(1)}%`, 'Percentage of Games']}
+                                        />
+                                        <Bar dataKey="frequency" fill="#82ca9d" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </CardContent>
+                    </Card>
                 </>
             )}
         </div>
     )
 }
 
-function simulateGames(numGames: number, numPlayers: number): { turns: number; winningPositions: { row: number; col: number }[] }[] {
-    const results: { turns: number; winningPositions: { row: number; col: number }[] }[] = []
+function simulateGames(
+    numGames: number, 
+    numPlayers: number, 
+    options: SimulationOptions
+): { 
+    turns: number; 
+    winningPositions: { row: number; col: number }[];
+    turnsToSecond: number;
+}[] {
+    const results: { 
+        turns: number; 
+        winningPositions: { row: number; col: number }[];
+        turnsToSecond: number;
+    }[] = []
+    
     for (let i = 0; i < numGames; i++) {
         const game = generateBingoGame(numPlayers)
+        const firstWinner = turnDidWin(game, game.numbers, options)
+        
+        const remainingPlayers = Array.from({ length: numPlayers }, (_, i) => i)
+            .filter(i => i !== firstWinner.playerIndex)
+        
+        let minTurnsToSecond = 75
+        for (const playerIndex of remainingPlayers) {
+            const playerResult = turnDidWinPlayer(game, game.numbers, playerIndex, options)
+            minTurnsToSecond = Math.min(minTurnsToSecond, playerResult.turns)
+        }
+
         results.push({
-            turns: turnDidWin(game, game.numbers).turns,
-            winningPositions: turnDidWin(game, game.numbers).winningPositions
+            turns: firstWinner.turns,
+            winningPositions: firstWinner.winningPositions,
+            turnsToSecond: minTurnsToSecond
         })
     }
     return results
@@ -270,20 +395,36 @@ function generateBingoGame(numPlayers: number): BingoGame {
     }
 }
 
-function turnDidWin(game: BingoGame, drawnNumbers: number[]): { turns: number; winningPositions: { row: number; col: number }[] } {
+function turnDidWin(
+    game: BingoGame, 
+    drawnNumbers: number[], 
+    options: SimulationOptions
+): { 
+    turns: number; 
+    winningPositions: { row: number; col: number }[];
+    playerIndex: number;
+} {
     for (let playerIndex = 0; playerIndex < game.cards.length; playerIndex++) {
-        const { turns, winningPositions } = turnDidWinPlayer(game, drawnNumbers, playerIndex)
-        if (winningPositions) {
-            return { turns, winningPositions }
+        const { turns, winningPositions } = turnDidWinPlayer(game, drawnNumbers, playerIndex, options)
+        if (winningPositions.length > 0) {
+            return { turns, winningPositions, playerIndex }
         }
     }
     throw new Error("No winner found after 75 turns")
 }
 
-function turnDidWinPlayer(game: BingoGame, drawnNumbers: number[], playerIndex: number): { turns: number; winningPositions: { row: number; col: number }[] } {
+function turnDidWinPlayer(
+    game: BingoGame, 
+    drawnNumbers: number[], 
+    playerIndex: number,
+    options: SimulationOptions
+): { 
+    turns: number; 
+    winningPositions: { row: number; col: number }[] 
+} {
     for (let i = 0; i < game.numbers.length; i++) {
         const card = game.cards[playerIndex]
-        const winningPositions = checkDidWin(card, drawnNumbers.slice(0, i + 1))
+        const winningPositions = checkDidWin(card, drawnNumbers.slice(0, i + 1), options)
         if (winningPositions) {
             return { turns: i + 1, winningPositions }
         }
@@ -293,7 +434,11 @@ function turnDidWinPlayer(game: BingoGame, drawnNumbers: number[], playerIndex: 
 
 
 
-function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; col: number }[] | null {
+function checkDidWin(
+    card: BingoCard, 
+    drawnNumbers: number[], 
+    options: SimulationOptions
+): { row: number; col: number }[] | null {
     const size = 5;
     const marked = new Array(25).fill(false);
 
@@ -301,6 +446,23 @@ function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; co
     for (let i = 0; i < card.numbers.length; i++) {
         if (drawnNumbers.includes(card.numbers[i])) {
             marked[i] = true;
+        }
+    }
+
+    // Apply free space if enabled
+    if (options.useFreeSpace) {
+        marked[12] = true; // Center position (2,2)
+    }
+
+    // Check corners if enabled
+    if (options.checkCorners) {
+        if (marked[0] && marked[4] && marked[20] && marked[24]) {
+            return [
+                { row: 0, col: 0 },
+                { row: 0, col: 4 },
+                { row: 4, col: 0 },
+                { row: 4, col: 4 }
+            ];
         }
     }
 
@@ -332,7 +494,7 @@ function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; co
         }
     }
 
-    // Check diagonal (top-left to bottom-right)
+    // Check diagonals
     let diagonal1Complete = true;
     for (let i = 0; i < size; i++) {
         if (!marked[i * size + i]) {
@@ -344,7 +506,6 @@ function checkDidWin(card: BingoCard, drawnNumbers: number[]): { row: number; co
         return Array.from({ length: size }, (_, i) => ({ row: i, col: i }));
     }
 
-    // Check diagonal (top-right to bottom-left)
     let diagonal2Complete = true;
     for (let i = 0; i < size; i++) {
         if (!marked[i * size + (size - 1 - i)]) {
