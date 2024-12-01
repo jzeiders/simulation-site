@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
+    "ci": "npm install",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {

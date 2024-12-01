@@ -28,20 +28,25 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+        working-directory: ./simulation-sites
           
       - name: Install Dependencies
         run: npm ci
-        
+        working-directory: ./simulation-sites
+
       - name: Build
         run: npm run build
+        working-directory: ./simulation-sites
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        
+        working-directory: ./simulation-sites
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
+        working-directory: ./simulation-sites
 
   deploy:
     environment:
