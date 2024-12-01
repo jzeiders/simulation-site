@@ -40,13 +40,11 @@ jobs:
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        working-directory: ./simulation-sites
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './dist'
-        working-directory: ./simulation-sites
+          path: './sumulation-sites/dist'
 
   deploy:
     environment:
