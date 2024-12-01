@@ -1,21 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { getWinTypes, getWinningTileIndices, makeBingoCard, makeBingoGame } from './bingo-simulator-blog'
 
-// Add seeded random number generator
-class SeededRandom {
-    private seed: number;
-
-    constructor(seed: number) {
-        this.seed = seed;
-    }
-
-    // Simple implementation of a seeded random number generator
-    random(): number {
-        const x = Math.sin(this.seed++) * 10000;
-        return x - Math.floor(x);
-    }
-}
-
 describe('Bingo Win Conditions', () => {
     // Helper function to create a test card with specific numbers
     const makeTestCard = (numbers: number[]) => ({ numbers })
@@ -190,10 +175,9 @@ describe('getWinningTileIndices', () => {
 
 describe('Bingo Card Generation (100 Seeded Tests)', () => {
     it('should generate 100 valid cards with fixed seed', () => {
-        const seededRandom = new SeededRandom(12345); // Fixed seed
         
         for (let test = 0; test < 100; test++) {
-            const card = makeBingoCard(() => seededRandom.random());
+            const card = makeBingoCard();
             
             // Check each column (B I N G O)
             for (let col = 0; col < 5; col++) {
@@ -225,10 +209,8 @@ describe('Bingo Card Generation (100 Seeded Tests)', () => {
 
 describe('Bingo Game Generation (100 Seeded Tests)', () => {
     it('should generate 100 valid games with fixed seed', () => {
-        const seededRandom = new SeededRandom(12345); // Fixed seed
-        
         for (let test = 0; test < 100; test++) {
-            const game = makeBingoGame(4, () => seededRandom.random());
+            const game = makeBingoGame(4);
             
             // Check drawn numbers
             expect(game.numbers).toHaveLength(75)

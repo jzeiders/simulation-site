@@ -21,7 +21,9 @@ class Cache {
   set(key: CacheKey, value: CacheValue): void {
     if (this.cache.size >= this.maxSize) {
       const firstKey = this.cache.keys().next().value;
-      this.cache.delete(firstKey);
+      if (firstKey) {
+        this.cache.delete(firstKey);
+      }
     }
 
     this.cache.set(key, {
@@ -59,7 +61,7 @@ export function cacheable(options: CacheOptions = {
     target: T
   ): T {
     // Create a new function wrapper that handles caching
-    const cachedFunction = function (...args: any[]) {
+    const cachedFunction = function (this: any, ...args: any[]) {
       const cacheKey = `standalone-${target.name}-${JSON.stringify(args)}`;
       const cachedValue = cache.get(cacheKey);
 

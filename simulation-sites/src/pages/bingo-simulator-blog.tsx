@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { cn, shuffleArray } from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { useMemo, useState } from 'react'
 import { cacheable } from '@/lib/Cache';
 import { shuffle, uniqBy } from 'es-toolkit'
@@ -313,12 +313,7 @@ interface BingoGame {
     numbers: number[];
 }
 
-// Add this type and helper function
-type RandomFn = () => number;
-const defaultRandom: RandomFn = () => Math.random();
-
-// Modify makeBingoCard to accept random function
-export function makeBingoCard(random: RandomFn = defaultRandom): BingoCard {
+export function makeBingoCard(): BingoCard {
     let card: number[] = []
     for (let i = 0; i < 5; i++) {
         card = card.concat(
@@ -332,9 +327,9 @@ export function makeBingoCard(random: RandomFn = defaultRandom): BingoCard {
 }
 
 // Modify makeBingoGame to accept random function
-export function makeBingoGame(numPlayers: number, random: RandomFn = defaultRandom): BingoGame {
+export function makeBingoGame(numPlayers: number): BingoGame {
     return {
-        cards: Array.from({ length: numPlayers }, () => makeBingoCard(random)),
+        cards: Array.from({ length: numPlayers }, () => makeBingoCard()),
         numbers: shuffle(Array.from({ length: 75 }, (_, i) => i + 1))
     }
 }
@@ -504,22 +499,6 @@ const generateHeatMapData = cacheable()(function generateHeatMapData(simulation:
     
     const winTypeMap = new Map<string, number>()
     
-    // Get the average position of each number in each drawn sequence
-    const numberPositionMap = new Map<number, number[]>()
-    for (let i = 0; i < 75; i++) {
-        numberPositionMap.set(i + 1, [])
-    }
-    simulation.games.forEach(game => {
-        game.numbers.forEach((number, index) => {
-            numberPositionMap.get(number)?.push(index)
-        })
-    })
-    numberPositionMap.forEach((positions, number) => {
-        numberPositionMap.set(number, positions.reduce((acc, curr) => acc + curr, 0) / positions.length)
-    })
-    numberPositionMap.forEach((_, number) => {
-        console.log(`${number}: ${numberPositionMap.get(number)}`)
-    })
     
     simulation.games.forEach(game => {
         const firstWinTurn = getFirstWinningTurn(game, options);
@@ -528,11 +507,6 @@ const generateHeatMapData = cacheable()(function generateHeatMapData(simulation:
         const winningCard = getFirstWinnerCard(game, options);
         const drawnNumbers = game.numbers.slice(0, firstWinTurn);
         const winTypes = getWinTypes(winningCard, drawnNumbers, options);
-
-        winTypes.forEach(winType => {
-            const winTypeKey = JSON.stringify(winType);
-            winTypeMap.set(winTypeKey, (winTypeMap.get(winTypeKey) || 0) + 1);
-        });
 
         // For each win type, increment the frequency of the winning tiles
         winTypes.forEach(winType => {
