@@ -1,4 +1,5 @@
 import day1Input from './input.txt?raw'
+import testInput from './test-input.txt?raw'
 import { Solution, runSolution } from '../common/SolutionRunner'
 import { SolutionCard } from '../common/SolutionCard'
 
@@ -47,6 +48,14 @@ const solution: Solution<NumberPair[], number> = {
             "For each number in the left array, multiply it by its count in the right array",
             "Sum all these products for the final result"
         ]
+    },
+
+    testCases: {
+        input: testInput,
+        expected: {
+            part1: 11,
+            part2: 31
+        }
     }
 };
 

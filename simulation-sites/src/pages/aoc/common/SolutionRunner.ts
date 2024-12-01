@@ -6,20 +6,44 @@ export interface Solution<T, R> {
     part1: string;
     steps: string[];
   };
+  testCases: {
+    input: string;
+    expected: {
+      part1: R;
+      part2: R;
+    };
+  };
 }
 
 export interface SolutionResult {
   result: string;
   runtime: string;
+  testResult?: {
+    success: boolean;
+    expected: string;
+    actual: string;
+  };
 }
 
 export function runSolution<T, R>(
   solution: Solution<T, R>,
   input: string
 ): { part1: SolutionResult; part2: SolutionResult } {
-  const parsedInput = solution.parseInput(input);
+  const runPart = (solutionFn: (input: T) => R, testExpected?: R): SolutionResult => {
+    // Run test case first if it exists
+    let testResult;
+    if (solution.testCases) {
+      const testInput = solution.parseInput(solution.testCases.input);
+      const testActual = solutionFn(testInput);
+      testResult = {
+        success: testActual === testExpected,
+        expected: testExpected?.toString() ?? "",
+        actual: testActual?.toString() ?? "",
+      };
+    }
 
-  const runPart = (solutionFn: (input: T) => R): SolutionResult => {
+    // Run actual solution
+    const parsedInput = solution.parseInput(input);
     const startTime = performance.now();
     const result = solutionFn(parsedInput);
     const endTime = performance.now();
@@ -28,11 +52,12 @@ export function runSolution<T, R>(
     return {
       result: result?.toString() ?? "",
       runtime: `${runtime}ms`,
+      testResult,
     };
   };
 
   return {
-    part1: runPart(solution.part1),
-    part2: runPart(solution.part2),
+    part1: runPart(solution.part1, solution.testCases?.expected.part1),
+    part2: runPart(solution.part2, solution.testCases?.expected.part2),
   };
 }
