@@ -21,8 +21,11 @@ interface SimulationOptions {
 // Copy other type definitions and helper functions...
 // (Include all the functions from the original file that don't depend on React/UI)
 
+
+
 // Add message handling
 self.onmessage = async (e: MessageEvent) => {
+    console.log("Worker received message", e.data)
     const { type, payload } = e.data;
 
     switch (type) {
@@ -33,7 +36,6 @@ self.onmessage = async (e: MessageEvent) => {
             break;
 
         case 'ANALYZE_SIMULATION':
-            console.log(payload)
             const { simulation: simToAnalyze, options } = payload;
             const analysis = {
                 winningTurnDistribution: getWinningTurnDistribution(simToAnalyze, {

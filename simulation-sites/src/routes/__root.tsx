@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/toaster'
 import { Link, Outlet, useMatches } from '@tanstack/react-router'
 import { createRootRoute } from '@tanstack/react-router'
 import { ChevronRight } from 'lucide-react'
@@ -48,6 +49,7 @@ function RootLayout() {
         )}
       </header>
       <Outlet />
+      <Toaster />
     </div>
   )
 }

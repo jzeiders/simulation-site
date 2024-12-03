@@ -9,6 +9,8 @@ import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BingoSimulation, getNumGames, getNumPlayers, makeSimulation } from './bingo-worker'
+import { toast } from "@/hooks/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 
 interface WinningTile {
     row: number;
@@ -50,6 +52,8 @@ function BingoHeatMap({ heatMap }: { heatMap: HeatMapData }) {
     );
 }
 
+
+
 export default function BingoSimulatorBlog() {
     const [simulations, setSimulations] = useState<BingoSimulation[]>(() => {
         return [makeSimulation(1000, 4)];
@@ -59,20 +63,28 @@ export default function BingoSimulatorBlog() {
     const [numGames, setNumGames] = useState(10000);
     const [numPlayers, setNumPlayers] = useState(10);
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const worker = useMemo(() => {
         return new Worker(
             new URL('./bingo-worker.ts', import.meta.url),
             { type: 'module' }
         );
     }, [])
-    console.log(worker)
+    const instance = new ComlinkWorker<typeof import("./bingo-worker.ts")>(new URL("./bingo-worker.ts", import.meta.url), {
+    });
+
 
     const activeSimulation = useMemo(() =>
         simulations[activeSimulationIdx],
         [simulations, activeSimulationIdx]
     );
-    
+    useEffect(() => {
+        (async () => {
+            const sim = await instance.makeSimulation(numGames, numPlayers)
+            setSimulations(prev => [...prev, sim])
+        })()
+    }, [numGames, numPlayers])
+
     useEffect(() => {
         setAnalysis(null)
         worker.postMessage({
@@ -90,25 +102,39 @@ export default function BingoSimulatorBlog() {
     const [analysis, setAnalysis] = useState<SimulationAnalysis | null>(null);
 
     useEffect(() => {
-        worker.onmessage = (e) => {
+        worker.addEventListener('message', (e) => {
             const { type, payload } = e.data;
-            
+
             switch (type) {
                 case 'SIMULATION_COMPLETE':
                     setSimulations(prev => [...prev, payload]);
                     setActiveSimulationIdx(prev => prev + 1);
                     setIsLoading(false);
+                    toast({
+                        title: "Simulation Complete",
+                        description: `Successfully simulated ${numGames} games with ${numPlayers} players`,
+                    })
                     break;
-                    
+
                 case 'ANALYSIS_COMPLETE':
+                    toast({
+                        title: "Analysis Complete",
+                        description: "Successfully analyzed the simulation",
+                    })
                     setAnalysis(payload);
-                    console.log(payload)
                     break;
             }
-        };
-        worker.onerror = (e) => {
+        });
+        worker.addEventListener('error', (e) => {
             console.error(e)
-        }
+            toast({
+                variant: "destructive",
+                title: "Simulation Failed",
+                description: "There was an error running the simulation",
+                action: <ToastAction altText="Try again" onClick={runSimulation}>Try again</ToastAction>,
+            })
+            setIsLoading(false);
+        });
         worker.postMessage({
             type: 'ANALYZE_SIMULATION',
             payload: {
@@ -121,7 +147,7 @@ export default function BingoSimulatorBlog() {
         })
 
         return () => worker.terminate();
-    }, []);
+    }, [numGames, numPlayers, toast]);
 
     const runSimulation = useCallback(() => {
         setIsLoading(true);
@@ -271,7 +297,7 @@ export default function BingoSimulatorBlog() {
                                     {
                                         label: "Basic Rules",
                                         distribution: analysis?.turnsUntilNextWinner
-                                    },  
+                                    },
                                 ].filter(d => d.distribution) as { label: string, distribution: Distribution }[]}
                                 xLabel="Turns"
                                 yLabel="Percentage of Games"
