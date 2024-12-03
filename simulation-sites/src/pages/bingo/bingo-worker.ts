@@ -24,39 +24,39 @@ interface SimulationOptions {
 
 
 // Add message handling
-self.onmessage = async (e: MessageEvent) => {
-    console.log("Worker received message", e.data)
-    const { type, payload } = e.data;
+// self.onmessage = async (e: MessageEvent) => {
+//     console.log("Worker received message", e.data)
+//     const { type, payload } = e.data;
 
-    switch (type) {
-        case 'RUN_SIMULATION':
-            const { numGames, numPlayers } = payload;
-            const simulation = makeSimulation(numGames, numPlayers);
-            self.postMessage({ type: 'SIMULATION_COMPLETE', payload: simulation });
-            break;
+//     switch (type) {
+//         case 'RUN_SIMULATION':
+//             const { numGames, numPlayers } = payload;
+//             const simulation = makeSimulation(numGames, numPlayers);
+//             self.postMessage({ type: 'SIMULATION_COMPLETE', payload: simulation });
+//             break;
 
-        case 'ANALYZE_SIMULATION':
-            const { simulation: simToAnalyze, options } = payload;
-            const analysis = {
-                winningTurnDistribution: getWinningTurnDistribution(simToAnalyze, {
-                    checkCorners: false,
-                    useFreeSpace: false
-                }),
-                withFreeSpace: getWinningTurnDistribution(simToAnalyze, {
-                    checkCorners: false,
-                    useFreeSpace: true
-                }),
-                withFreeSpaceAndCorners: getWinningTurnDistribution(simToAnalyze, {
-                    checkCorners: true,
-                    useFreeSpace: true
-                }),
-                turnsUntilNextWinner: getTurnsUntilNextWinnerDistribution(simToAnalyze, options),
-                heatMapData: generateHeatMapData(simToAnalyze, options)
-            };
-            self.postMessage({ type: 'ANALYSIS_COMPLETE', payload: analysis });
-            break;
-    }
-};
+//         case 'ANALYZE_SIMULATION':
+//             const { simulation: simToAnalyze, options } = payload;
+//             const analysis = {
+//                 winningTurnDistribution: getWinningTurnDistribution(simToAnalyze, {
+//                     checkCorners: false,
+//                     useFreeSpace: false
+//                 }),
+//                 withFreeSpace: getWinningTurnDistribution(simToAnalyze, {
+//                     checkCorners: false,
+//                     useFreeSpace: true
+//                 }),
+//                 withFreeSpaceAndCorners: getWinningTurnDistribution(simToAnalyze, {
+//                     checkCorners: true,
+//                     useFreeSpace: true
+//                 }),
+//                 turnsUntilNextWinner: getTurnsUntilNextWinnerDistribution(simToAnalyze, options),
+//                 heatMapData: generateHeatMapData(simToAnalyze, options)
+//             };
+//             self.postMessage({ type: 'ANALYSIS_COMPLETE', payload: analysis });
+//             break;
+//     }
+// };
 
 // Bingo Simulation Data
 export interface BingoSimulation {
@@ -348,3 +348,20 @@ interface HeatMapData {
 
 // Add near other exports
 export type { HeatMapData }
+
+// Add this function to expose analysis functionality
+export async function analyzeSimulation(simulation: BingoSimulation, options: SimulationOptions) {
+    return {
+        winningTurnDistribution: getWinningTurnDistribution(simulation, options),
+        withFreeSpace: getWinningTurnDistribution(simulation, {
+            ...options,
+            useFreeSpace: true
+        }),
+        withFreeSpaceAndCorners: getWinningTurnDistribution(simulation, {
+            checkCorners: true,
+            useFreeSpace: true
+        }),
+        turnsUntilNextWinner: getTurnsUntilNextWinnerDistribution(simulation, options),
+        heatMapData: generateHeatMapData(simulation, options)
+    };
+}

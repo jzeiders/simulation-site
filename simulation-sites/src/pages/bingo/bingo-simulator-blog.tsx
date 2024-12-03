@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { cn } from "@/lib/utils"
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { BingoSimulation, getNumGames, getNumPlayers, makeSimulation } from './bingo-worker'
+import { BingoSimulation, getNumGames, getNumPlayers } from './bingo-worker'
+import type * as BingoWorker from './bingo-worker'
 import { toast } from "@/hooks/use-toast"
 import { ToastAction } from "@/components/ui/toast"
 
@@ -55,107 +56,95 @@ function BingoHeatMap({ heatMap }: { heatMap: HeatMapData }) {
 
 
 export default function BingoSimulatorBlog() {
-    const [simulations, setSimulations] = useState<BingoSimulation[]>(() => {
-        return [makeSimulation(1000, 4)];
-    });
-
+    const [simulations, setSimulations] = useState<BingoSimulation[]>([]);
     const [activeSimulationIdx, setActiveSimulationIdx] = useState<number>(0);
     const [numGames, setNumGames] = useState(10000);
     const [numPlayers, setNumPlayers] = useState(10);
     const [isLoading, setIsLoading] = useState(false);
 
-    const worker = useMemo(() => {
-        return new Worker(
-            new URL('./bingo-worker.ts', import.meta.url),
-            { type: 'module' }
-        );
-    }, [])
-    const instance = new ComlinkWorker<typeof import("./bingo-worker.ts")>(new URL("./bingo-worker.ts", import.meta.url), {
-    });
-
+    const instance = new ComlinkWorker<typeof BingoWorker>(
+        new URL('./bingo-worker.ts', import.meta.url)
+    )
 
     const activeSimulation = useMemo(() =>
         simulations[activeSimulationIdx],
         [simulations, activeSimulationIdx]
     );
-    useEffect(() => {
-        (async () => {
-            const sim = await instance.makeSimulation(numGames, numPlayers)
-            setSimulations(prev => [...prev, sim])
-        })()
-    }, [numGames, numPlayers])
 
     useEffect(() => {
-        setAnalysis(null)
-        worker.postMessage({
-            type: 'ANALYZE_SIMULATION',
-            payload: {
-                simulation: activeSimulation,
-                options: {
-                    checkCorners: false,
-                    useFreeSpace: false
-                }
+        const loadInitialSimulation = async () => {
+            try {
+                const sim = await instance.makeSimulation(numGames, numPlayers);
+                setSimulations([sim]);
+                setActiveSimulationIdx(0);
+            } catch (error) {
+                console.error(error);
+                toast({
+                    variant: "destructive",
+                    title: "Initial Simulation Failed",
+                    description: "There was an error creating the initial simulation",
+                    action: <ToastAction altText="Try again" onClick={runSimulation}>Try again</ToastAction>,
+                });
             }
-        })
-    }, [activeSimulation])
+        };
+
+        loadInitialSimulation();
+    }, [instance]);
 
     const [analysis, setAnalysis] = useState<SimulationAnalysis | null>(null);
 
     useEffect(() => {
-        worker.addEventListener('message', (e) => {
-            const { type, payload } = e.data;
+        if (!instance || !activeSimulation) return;
 
-            switch (type) {
-                case 'SIMULATION_COMPLETE':
-                    setSimulations(prev => [...prev, payload]);
-                    setActiveSimulationIdx(prev => prev + 1);
-                    setIsLoading(false);
-                    toast({
-                        title: "Simulation Complete",
-                        description: `Successfully simulated ${numGames} games with ${numPlayers} players`,
-                    })
-                    break;
-
-                case 'ANALYSIS_COMPLETE':
-                    toast({
-                        title: "Analysis Complete",
-                        description: "Successfully analyzed the simulation",
-                    })
-                    setAnalysis(payload);
-                    break;
+        const analyzeSimulation = async () => {
+            try {
+                const analysis = await instance.analyzeSimulation(activeSimulation, {
+                    checkCorners: false,
+                    useFreeSpace: false
+                });
+                setAnalysis(analysis);
+                toast({
+                    title: "Analysis Complete",
+                    description: "Successfully analyzed the simulation",
+                });
+            } catch (error) {
+                console.error(error);
+                toast({
+                    variant: "destructive",
+                    title: "Analysis Failed",
+                    description: "There was an error analyzing the simulation",
+                });
             }
-        });
-        worker.addEventListener('error', (e) => {
-            console.error(e)
+        };
+
+        setAnalysis(null);
+        analyzeSimulation();
+    }, [instance, activeSimulation]);
+
+    const runSimulation = useCallback(async () => {
+        if (!instance) return;
+
+        setIsLoading(true);
+        try {
+            const sim = await instance.makeSimulation(numGames, numPlayers);
+            setSimulations(prev => [...prev, sim]);
+            setActiveSimulationIdx(prev => prev + 1);
+            toast({
+                title: "Simulation Complete",
+                description: `Successfully simulated ${numGames} games with ${numPlayers} players`,
+            });
+        } catch (error) {
+            console.error(error);
             toast({
                 variant: "destructive",
                 title: "Simulation Failed",
                 description: "There was an error running the simulation",
                 action: <ToastAction altText="Try again" onClick={runSimulation}>Try again</ToastAction>,
-            })
+            });
+        } finally {
             setIsLoading(false);
-        });
-        worker.postMessage({
-            type: 'ANALYZE_SIMULATION',
-            payload: {
-                simulation: activeSimulation,
-                options: {
-                    checkCorners: false,
-                    useFreeSpace: false
-                }
-            }
-        })
-
-        return () => worker.terminate();
-    }, [numGames, numPlayers, toast]);
-
-    const runSimulation = useCallback(() => {
-        setIsLoading(true);
-        worker.postMessage({
-            type: 'RUN_SIMULATION',
-            payload: { numGames, numPlayers }
-        });
-    }, [numGames, numPlayers]);
+        }
+    }, [instance, numGames, numPlayers]);
 
     const simulationSelector = (
         <div className="mb-4">
