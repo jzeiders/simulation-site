@@ -1,11 +1,16 @@
-export interface Solution<T, R> {
-  parseInput: (input: string) => T;
+export interface Implementation<T, R> {
+  name: string;
   part1: (input: T) => R;
   part2: (input: T) => R;
   explanation: {
     part1: string;
     part2: string;
   };
+}
+
+export interface Solution<T, R> {
+  parseInput: (input: string) => T;
+  implementations: Implementation<T, R>[];
   testCases: {
     input: string;
     expected: {
@@ -25,10 +30,16 @@ export interface SolutionResult {
   };
 }
 
+export interface ImplementationResults {
+  name: string;
+  part1: SolutionResult;
+  part2: SolutionResult;
+}
+
 export function runSolution<T, R>(
   solution: Solution<T, R>,
   input: string
-): { part1: SolutionResult; part2: SolutionResult } {
+): ImplementationResults[] {
   const runPart = (solutionFn: (input: T) => R, testExpected?: R): SolutionResult => {
     // Run test case first if it exists
     let testResult;
@@ -45,19 +56,20 @@ export function runSolution<T, R>(
     // Run actual solution
     const parsedInput = solution.parseInput(input);
     const startTime = performance.now();
-    const result =  solutionFn(parsedInput);
+    const result = solutionFn(parsedInput);
     const endTime = performance.now();
     const runtime = (endTime - startTime).toFixed(2);
 
     return {
-      result:  result?.toString() ?? "",
+      result: result?.toString() ?? "",
       runtime: `${runtime}ms`,
       testResult,
     };
   };
 
-  return {
-    part1: runPart(solution.part1, solution.testCases?.expected.part1),
-    part2: runPart(solution.part2, solution.testCases?.expected.part2),
-  };
+  return solution.implementations.map(implementation => ({
+    name: implementation.name,
+    part1: runPart(implementation.part1, solution.testCases?.expected.part1),
+    part2: runPart(implementation.part2, solution.testCases?.expected.part2),
+  }));
 }

@@ -13,6 +13,7 @@ function validLevel(level: number[]): boolean {
         return differences.every(d => d < 0)
     }
 }
+
 function allSubsetsMinusOne(level: number[]): number[][] {
     return level.map((_, i) => level.slice(0, i).concat(level.slice(i + 1)))
 }
@@ -29,18 +30,23 @@ const solution: Solution<number[][], number> = {
             )
     },
 
-    part1: (input: number[][]): number => {
-        return input.filter(validLevel).length
-    },
+    implementations: [
+        {
+            name: "Array Operations",
+            part1: (input: number[][]): number => {
+                return input.filter(validLevel).length
+            },
 
-    part2: (input: number[][]): number => {
-        return input.map(allSubsetsMinusOne).map((xs) => xs.some(validLevel)).filter(Boolean).length
-    },
+            part2: (input: number[][]): number => {
+                return input.map(allSubsetsMinusOne).map((xs) => xs.some(validLevel)).filter(Boolean).length
+            },
 
-    explanation: {
-        part1: "This one is super simple, just get a set of the distances and run the requirement checks on them.",
-        part2: "Brute forcing the problem is feasible given the small input size, so we just check all subsets of the input minus one and see if any of them are valid."
-    },
+            explanation: {
+                part1: "This one is super simple, just get a set of the distances and run the requirement checks on them.",
+                part2: "Brute forcing the problem is feasible given the small input size, so we just check all subsets of the input minus one and see if any of them are valid."
+            }
+        }
+    ],
 
     testCases: {
         input: testInput,
@@ -52,15 +58,13 @@ const solution: Solution<number[][], number> = {
 };
 
 export function Day2() {
-    const { part1, part2 } = runSolution(solution, input);
+    const results = runSolution(solution, input);
 
     return (
         <SolutionCard
             day={2}
             title="Red-Nosed Reports"
-            part1={part1}
-            part2={part2}
-            explanation={solution.explanation}
+            implementations={results}
         />
     );
 } 

@@ -19,30 +19,35 @@ const solution: Solution<NumberPair[], number> = {
             });
     },
 
-    part1: (pairs: NumberPair[]): number => {
-        const sortedLeft = pairs.map(p => p.left).sort((a, b) => a - b);
-        const sortedRight = pairs.map(p => p.right).sort((a, b) => a - b);
+    implementations: [
+        {
+            name: "Sorting",
+            part1: (pairs: NumberPair[]): number => {
+                const sortedLeft = pairs.map(p => p.left).sort((a, b) => a - b);
+                const sortedRight = pairs.map(p => p.right).sort((a, b) => a - b);
 
-        return sortedLeft.reduce((sum, val, index) => {
-            return sum + Math.abs(val - sortedRight[index]);
-        }, 0);
-    },
+                return sortedLeft.reduce((sum, val, index) => {
+                    return sum + Math.abs(val - sortedRight[index]);
+                }, 0);
+            },
 
-    part2: (pairs: NumberPair[]): number => {
-        const valueCounts = new Map<number, number>();
-        for (const pair of pairs) {
-            valueCounts.set(pair.right, (valueCounts.get(pair.right) || 0) + 1);
+            part2: (pairs: NumberPair[]): number => {
+                const valueCounts = new Map<number, number>();
+                for (const pair of pairs) {
+                    valueCounts.set(pair.right, (valueCounts.get(pair.right) || 0) + 1);
+                }
+
+                return pairs.reduce((sum, pair) => {
+                    return sum + pair.left * (valueCounts.get(pair.left) || 0);
+                }, 0);
+            },
+
+            explanation: {
+                part1: "The first part involves finding the minimum total distance between two arrays after optimally pairing their elements. The optimal solution pairs the smallest number from one array with the smallest from the other.",
+                part2: "The second part calculates a weighted sum where each number from the left array is multiplied by how many times it appears in the right array, then all products are summed together."
+            }
         }
-
-        return pairs.reduce((sum, pair) => {
-            return sum + pair.left * (valueCounts.get(pair.left) || 0);
-        }, 0);
-    },
-
-    explanation: {
-        part1: "The first part involves finding the minimum total distance between two arrays after optimally pairing their elements. The optimal solution pairs the smallest number from one array with the smallest from the other.",
-        part2: "The second part calculates a weighted sum where each number from the left array is multiplied by how many times it appears in the right array, then all products are summed together."
-    },
+    ],
 
     testCases: {
         input: testInput,
@@ -54,15 +59,13 @@ const solution: Solution<NumberPair[], number> = {
 };
 
 export function Day1() {
-    const { part1, part2 } = runSolution(solution, day1Input);
+    const results = runSolution(solution, day1Input);
 
     return (
         <SolutionCard
             day={1}
             title="Array Distance Calculator"
-            part1={part1}
-            part2={part2}
-            explanation={solution.explanation}
+            implementations={results}
         />
     );
 }
