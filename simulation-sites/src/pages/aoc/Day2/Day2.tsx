@@ -65,6 +65,7 @@ export function Day2() {
             day={2}
             title="Red-Nosed Reports"
             implementations={results}
+            githubUrl="https://github.com/jzeiders/simulation-site/blob/main/simulation-sites/src/pages/aoc/Day2/Day2.tsx"
         />
     );
 } 

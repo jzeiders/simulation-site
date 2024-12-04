@@ -212,6 +212,7 @@ export function Day3() {
             day={3}
             title="Mul it Over"
             implementations={results}
+            githubUrl="https://github.com/jzeiders/simulation-site/blob/main/simulation-sites/src/pages/aoc/Day3/Day3.tsx"
         />
     );
 } 

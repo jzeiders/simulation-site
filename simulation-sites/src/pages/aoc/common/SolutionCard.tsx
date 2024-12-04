@@ -1,12 +1,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { CheckCircle2, XCircle } from "lucide-react"
+import { CheckCircle2, XCircle, Github } from "lucide-react"
 import { ImplementationResults } from "./SolutionRunner"
 
 interface SolutionCardProps {
     day: number
     title: string
     implementations: ImplementationResults[]
+    githubUrl?: string
 }
 
 function TestResult({ testResult }: { testResult?: { success: boolean; expected: string; actual: string } }) {
@@ -60,13 +61,23 @@ function ImplementationSection({ implementation }: { implementation: Implementat
     )
 }
 
-export function SolutionCard({ day, title, implementations }: SolutionCardProps) {
+export function SolutionCard({ day, title, implementations, githubUrl }: SolutionCardProps) {
     return (
         <Card className="w-full max-w-4xl mx-auto">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-2xl font-bold">
                     Day {day}: {title}
                 </CardTitle>
+                {githubUrl && (
+                    <a 
+                        href={githubUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="p-2 rounded-full border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                        <Github className="w-5 h-5" />
+                    </a>
+                )}
             </CardHeader>
             <CardContent className="space-y-8">
                 {implementations.map((implementation, index) => (

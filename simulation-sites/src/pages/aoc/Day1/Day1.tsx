@@ -66,6 +66,7 @@ export function Day1() {
             day={1}
             title="Array Distance Calculator"
             implementations={results}
+            githubUrl="https://github.com/jzeiders/simulation-site/blob/main/simulation-sites/src/pages/aoc/Day1/Day1.tsx"
         />
     );
 }
