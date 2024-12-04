@@ -45,12 +45,12 @@ export function runSolution<T, R>(
     // Run actual solution
     const parsedInput = solution.parseInput(input);
     const startTime = performance.now();
-    const result = solutionFn(parsedInput);
+    const result =  solutionFn(parsedInput);
     const endTime = performance.now();
     const runtime = (endTime - startTime).toFixed(2);
 
     return {
-      result: result?.toString() ?? "",
+      result:  result?.toString() ?? "",
       runtime: `${runtime}ms`,
       testResult,
     };

@@ -45,7 +45,70 @@ function nextState(state: State, char: string): State {
         }
         if (Number.isInteger(parseInt(char))) return { ...state, idx: "second", second: state.second + char }
     }
-
+    return { ...state, idx: "none" }
+}
+interface State2 {
+    idx: StateIdx | "d" | "do" | "do(" | "don" | "don'" | "don't" | "don't("
+    value: number;
+    first: string;
+    second: string;
+    enabled: boolean;
+}
+function nextStatePart2(state: State2, char: string): State2 {
+    console.log(state, char)
+    if (char === "d") return { ...state, idx: "d" }
+    if (state.idx === "d") {
+        if (char === "o") return { ...state, idx: "do" }
+    }
+    if (state.idx === "do") {
+        if (char === "(") return { ...state, idx: "do(" }
+        if (char === "n") return { ...state, idx: "don" }
+    }
+    if (state.idx === "do(") {
+        if (char === ")") return { ...state, idx: "none", enabled: true }
+    }
+    if (state.idx === "don") {
+        if (char === "'") return { ...state, idx: "don'" }
+    }
+    if (state.idx === "don'") {
+        if (char === "t") return { ...state, idx: "don't" }
+    }
+    if (state.idx === "don't") {
+        if (char === "(") return { ...state, idx: "don't(" }
+    }
+    if (state.idx === "don't(") {
+        if (char === ")") return { ...state, idx: "none", enabled: false }
+    }
+    if (state.idx === "none" && state.enabled) {
+        if (char === "m") return { ...state, idx: "m" }
+    }
+    if (state.idx === "m" ) {
+        if (char === "u") return { ...state, idx: "u" }
+    }
+    if (state.idx === "u") {
+        if (char === "l") return { ...state, idx: "l" }
+    }
+    if (state.idx === "l") {
+        if (char === "(") return { ...state, idx: "(" }
+    }
+    if (state.idx === "(") {
+        if (Number.isInteger(parseInt(char))) return { ...state, idx: "first", first: char }
+    }
+    if (state.idx === "first") {
+        if (char === ',') {
+            return { ...state, idx: "," }
+        }
+        if (Number.isInteger(parseInt(char))) return { ...state, idx: "first", first: state.first + char }
+    }
+    if (state.idx === ",") {
+        if (Number.isInteger(parseInt(char))) return { ...state, idx: "second", second: char }
+    }
+    if (state.idx === "second") {
+        if (char === ")") {
+            return { ...state, idx: "none", value: parseInt(state.first) * parseInt(state.second) + state.value }
+        }
+        if (Number.isInteger(parseInt(char))) return { ...state, idx: "second", second: state.second + char }
+    }
     return { ...state, idx: "none" }
 }
 
@@ -63,8 +126,11 @@ const solution: Solution<string, number> = {
     },
 
     part2: (input: string): number => {
-        // Implement part 2 solution
-        return 0
+        let state: State2 = { idx: "none", value: 0, first: "", second: "", enabled: true }
+        for (const char of input) {
+            state = nextStatePart2(state, char)
+        }
+        return state.value
     },
 
     explanation: {
@@ -76,7 +142,7 @@ const solution: Solution<string, number> = {
         input: testInput,
         expected: {
             part1: 161,  // Add expected test result
-            part2: 0   // Add expected test result
+            part2: 48   // Add expected test result
         }
     }
 };
