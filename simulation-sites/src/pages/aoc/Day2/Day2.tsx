@@ -30,7 +30,6 @@ const solution: Solution<number[][], number> = {
     },
 
     part1: (input: number[][]): number => {
-        console.log(input)
         return input.filter(validLevel).length
     },
 
