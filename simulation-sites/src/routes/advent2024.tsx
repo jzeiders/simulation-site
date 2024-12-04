@@ -2,6 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Day1 } from '@/pages/aoc/Day1/Day1'
 import { Day2 } from '@/pages/aoc/Day2/Day2'
 import { Day3 } from '@/pages/aoc/Day3/Day3'
+import { Day4 } from '@/pages/aoc/Day4/Day4'
+
 export const Route = createFileRoute('/advent2024')({
   component: AdventOfCode2024,
 })
@@ -16,6 +18,7 @@ function AdventOfCode2024() {
         <Day1 />
         <Day2 />
         <Day3 />
+        <Day4 />
       </div>
     </div>
   )
