@@ -11,11 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as BingoSqlImport } from './routes/bingo-sql'
 import { Route as BingoImport } from './routes/bingo'
 import { Route as Advent2024Import } from './routes/advent2024'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const BingoSqlRoute = BingoSqlImport.update({
+  id: '/bingo-sql',
+  path: '/bingo-sql',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const BingoRoute = BingoImport.update({
   id: '/bingo',
@@ -60,6 +67,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BingoImport
       parentRoute: typeof rootRoute
     }
+    '/bingo-sql': {
+      id: '/bingo-sql'
+      path: '/bingo-sql'
+      fullPath: '/bingo-sql'
+      preLoaderRoute: typeof BingoSqlImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -69,12 +83,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/advent2024': typeof Advent2024Route
   '/bingo': typeof BingoRoute
+  '/bingo-sql': typeof BingoSqlRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/advent2024': typeof Advent2024Route
   '/bingo': typeof BingoRoute
+  '/bingo-sql': typeof BingoSqlRoute
 }
 
 export interface FileRoutesById {
@@ -82,14 +98,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/advent2024': typeof Advent2024Route
   '/bingo': typeof BingoRoute
+  '/bingo-sql': typeof BingoSqlRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/advent2024' | '/bingo'
+  fullPaths: '/' | '/advent2024' | '/bingo' | '/bingo-sql'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/advent2024' | '/bingo'
-  id: '__root__' | '/' | '/advent2024' | '/bingo'
+  to: '/' | '/advent2024' | '/bingo' | '/bingo-sql'
+  id: '__root__' | '/' | '/advent2024' | '/bingo' | '/bingo-sql'
   fileRoutesById: FileRoutesById
 }
 
@@ -97,12 +114,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   Advent2024Route: typeof Advent2024Route
   BingoRoute: typeof BingoRoute
+  BingoSqlRoute: typeof BingoSqlRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   Advent2024Route: Advent2024Route,
   BingoRoute: BingoRoute,
+  BingoSqlRoute: BingoSqlRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +136,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/advent2024",
-        "/bingo"
+        "/bingo",
+        "/bingo-sql"
       ]
     },
     "/": {
@@ -128,6 +148,9 @@ export const routeTree = rootRoute
     },
     "/bingo": {
       "filePath": "bingo.tsx"
+    },
+    "/bingo-sql": {
+      "filePath": "bingo-sql.tsx"
     }
   }
 }

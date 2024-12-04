@@ -18,6 +18,12 @@ const articles = [
     description: "Solutions and explanations for Advent of Code 2024 programming challenges.",
     link: "/advent2024",
     date: "December 2nd, 2024"
+  },
+  {
+    title: "Bingo SQL",
+    description: "Exploring the probabilities and patterns in Bingo games through SQL.",
+    link: "/bingo-sql",
+    date: "December 4th, 2024"
   }
 ]
 
