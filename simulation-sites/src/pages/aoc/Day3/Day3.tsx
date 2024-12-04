@@ -134,8 +134,8 @@ const solution: Solution<string, number> = {
     },
 
     explanation: {
-        part1: "Part 1 explanation goes here",
-        part2: "Part 2 explanation goes here"
+        part1: "Just a little state machine. The excessive switch cases were a little buggy but simple enough to work.",
+        part2: "Same as part 1 but with a little more state. The state machine is a little more complex but it works."
     },
 
     testCases: {
