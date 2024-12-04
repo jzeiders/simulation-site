@@ -5,3 +5,6 @@ Todo:
 1. Performance improvements
 2. Better copy for the blog post
 3. Shuffle function (DONE: This fixed the bias in the outcome function)
+4. Deploy (DONE)
+
+Hell yeah the deploy worked! That's super satis
