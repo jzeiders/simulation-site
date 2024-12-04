@@ -32,11 +32,11 @@ jobs:
           
       - name: Install Dependencies
         run: npm ci
-        working-directory: ./simulation-site
+        working-directory: ./simulation-sites
 
       - name: Build
         run: npm run build
-        working-directory: ./simulation-site
+        working-directory: ./simulation-sites
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -44,7 +44,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './simulation-site/dist'
+          path: './simulation-sites/dist'
 
   deploy:
     environment:
