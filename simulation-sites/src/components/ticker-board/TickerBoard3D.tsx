@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react'
-import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+import React from 'react'
 import TickerFlap from './TickerFlap'
 
 interface TickerBoard3DProps {

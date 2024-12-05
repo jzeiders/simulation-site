@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import TickerBoard3D from '../components/TickerBoard3D'
+import { useEffect, useState } from 'react'
+import TickerBoard3D from '../components/ticker-board/TickerBoard3D'
 
 export default function Home() {
   const [text, setText] = useState('WELCOME')

@@ -8,33 +8,38 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as BingoSqlImport } from './routes/bingo-sql'
-import { Route as BingoImport } from './routes/bingo'
-import { Route as Advent2024Import } from './routes/advent2024'
 import { Route as IndexImport } from './routes/index'
+
+// Create Virtual Routes
+
+const BingoSqlLazyImport = createFileRoute('/bingo-sql')()
+const BingoLazyImport = createFileRoute('/bingo')()
+const Advent2024LazyImport = createFileRoute('/advent2024')()
 
 // Create/Update Routes
 
-const BingoSqlRoute = BingoSqlImport.update({
+const BingoSqlLazyRoute = BingoSqlLazyImport.update({
   id: '/bingo-sql',
   path: '/bingo-sql',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/bingo-sql.lazy').then((d) => d.Route))
 
-const BingoRoute = BingoImport.update({
+const BingoLazyRoute = BingoLazyImport.update({
   id: '/bingo',
   path: '/bingo',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/bingo.lazy').then((d) => d.Route))
 
-const Advent2024Route = Advent2024Import.update({
+const Advent2024LazyRoute = Advent2024LazyImport.update({
   id: '/advent2024',
   path: '/advent2024',
   getParentRoute: () => rootRoute,
-} as any)
+} as any).lazy(() => import('./routes/advent2024.lazy').then((d) => d.Route))
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -57,21 +62,21 @@ declare module '@tanstack/react-router' {
       id: '/advent2024'
       path: '/advent2024'
       fullPath: '/advent2024'
-      preLoaderRoute: typeof Advent2024Import
+      preLoaderRoute: typeof Advent2024LazyImport
       parentRoute: typeof rootRoute
     }
     '/bingo': {
       id: '/bingo'
       path: '/bingo'
       fullPath: '/bingo'
-      preLoaderRoute: typeof BingoImport
+      preLoaderRoute: typeof BingoLazyImport
       parentRoute: typeof rootRoute
     }
     '/bingo-sql': {
       id: '/bingo-sql'
       path: '/bingo-sql'
       fullPath: '/bingo-sql'
-      preLoaderRoute: typeof BingoSqlImport
+      preLoaderRoute: typeof BingoSqlLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -81,24 +86,24 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/advent2024': typeof Advent2024Route
-  '/bingo': typeof BingoRoute
-  '/bingo-sql': typeof BingoSqlRoute
+  '/advent2024': typeof Advent2024LazyRoute
+  '/bingo': typeof BingoLazyRoute
+  '/bingo-sql': typeof BingoSqlLazyRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/advent2024': typeof Advent2024Route
-  '/bingo': typeof BingoRoute
-  '/bingo-sql': typeof BingoSqlRoute
+  '/advent2024': typeof Advent2024LazyRoute
+  '/bingo': typeof BingoLazyRoute
+  '/bingo-sql': typeof BingoSqlLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/advent2024': typeof Advent2024Route
-  '/bingo': typeof BingoRoute
-  '/bingo-sql': typeof BingoSqlRoute
+  '/advent2024': typeof Advent2024LazyRoute
+  '/bingo': typeof BingoLazyRoute
+  '/bingo-sql': typeof BingoSqlLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -112,16 +117,16 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  Advent2024Route: typeof Advent2024Route
-  BingoRoute: typeof BingoRoute
-  BingoSqlRoute: typeof BingoSqlRoute
+  Advent2024LazyRoute: typeof Advent2024LazyRoute
+  BingoLazyRoute: typeof BingoLazyRoute
+  BingoSqlLazyRoute: typeof BingoSqlLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  Advent2024Route: Advent2024Route,
-  BingoRoute: BingoRoute,
-  BingoSqlRoute: BingoSqlRoute,
+  Advent2024LazyRoute: Advent2024LazyRoute,
+  BingoLazyRoute: BingoLazyRoute,
+  BingoSqlLazyRoute: BingoSqlLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -144,13 +149,13 @@ export const routeTree = rootRoute
       "filePath": "index.tsx"
     },
     "/advent2024": {
-      "filePath": "advent2024.tsx"
+      "filePath": "advent2024.lazy.tsx"
     },
     "/bingo": {
-      "filePath": "bingo.tsx"
+      "filePath": "bingo.lazy.tsx"
     },
     "/bingo-sql": {
-      "filePath": "bingo-sql.tsx"
+      "filePath": "bingo-sql.lazy.tsx"
     }
   }
 }

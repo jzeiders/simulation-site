@@ -12,13 +12,13 @@ interface TickerFlapProps {
   totalChars: number
 }
 
-const TickerFlap: React.FC<TickerFlapProps> = ({ targetChar, index, totalChars }) => {
+const TickerFlap: React.FC<TickerFlapProps> = ({ index, totalChars }) => {
   const meshRef = useRef<THREE.Mesh>(null)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isColor, setIsColor] = useState(false)
   const [rotationCount, setRotationCount] = useState(0)
 
-  useFrame((state) => {
+  useFrame(() => {
     if (meshRef.current) {
       meshRef.current.rotation.x = THREE.MathUtils.lerp(
         meshRef.current.rotation.x,

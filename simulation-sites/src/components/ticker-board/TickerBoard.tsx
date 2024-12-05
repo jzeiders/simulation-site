@@ -28,8 +28,8 @@ const TickerBoard: React.FC<TickerBoardProps> = ({ text, updateInterval = 100 })
 
   return (
     <div className={styles.tickerBoard}>
-      {displayText.split('').map((char, index) => (
-        <TickerFlap key={index} char={char} />
+      {displayText.split('').map((_, index) => (
+        <TickerFlap key={index} index={index} totalChars={text.length} targetChar={text[index]} />
       ))}
     </div>
   )
