@@ -3,852 +3,1241 @@
       "name": "Howard",
       "lat": 42.019063,
       "lon": -87.672892,
-      "lines": ["Red", "Purple", "Yellow"]
+      "lines": [
+        {"line": "Red", "prior": null, "next": "Jarvis"},
+        {"line": "Purple", "prior": null, "next": "South Boulevard"},
+        {"line": "Yellow", "prior": null, "next": "Oakton-Skokie"}
+      ]
     },
     {
       "name": "Jarvis",
       "lat": 42.015876,
       "lon": -87.669905,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Howard", "next": "Morse"}
+      ]
     },
     {
       "name": "Morse",
       "lat": 42.008362,
       "lon": -87.665909,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Jarvis", "next": "Loyola"}
+      ]
     },
     {
       "name": "Loyola",
       "lat": 42.001073,
       "lon": -87.661061,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Morse", "next": "Granville"}
+      ]
     },
     {
       "name": "Granville",
       "lat": 41.993664,
       "lon": -87.659202,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Loyola", "next": "Thorndale"}
+      ]
     },
     {
       "name": "Thorndale",
       "lat": 41.98574,
       "lon": -87.659076,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Granville", "next": "Bryn Mawr"}
+      ]
     },
     {
       "name": "Bryn Mawr",
       "lat": 41.983506,
       "lon": -87.658838,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Thorndale", "next": "Berwyn"}
+      ]
     },
     {
       "name": "Berwyn",
       "lat": 41.977984,
       "lon": -87.658527,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Bryn Mawr", "next": "Argyle"}
+      ]
     },
     {
       "name": "Argyle",
       "lat": 41.973453,
       "lon": -87.65853,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Berwyn", "next": "Lawrence"}
+      ]
     },
     {
       "name": "Lawrence",
       "lat": 41.969139,
       "lon": -87.658521,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Argyle", "next": "Wilson"}
+      ]
     },
     {
       "name": "Wilson",
       "lat": 41.964272,
       "lon": -87.657588,
-      "lines": ["Red", "Purple"]
+      "lines": [
+        {"line": "Red", "prior": "Lawrence", "next": "Sheridan"},
+        {"line": "Purple", "prior": "Howard", "next": "Belmont"}
+      ]
     },
     {
       "name": "Sheridan",
       "lat": 41.95377,
       "lon": -87.654929,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Wilson", "next": "Addison"}
+      ]
     },
     {
       "name": "Addison",
       "lat": 41.947428,
       "lon": -87.653626,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Sheridan", "next": "Belmont"}
+      ]
     },
     {
       "name": "Belmont",
       "lat": 41.939751,
       "lon": -87.65338,
-      "lines": ["Red", "Purple", "Brown"]
+      "lines": [
+        {"line": "Red", "prior": "Addison", "next": "Fullerton"},
+        {"line": "Purple", "prior": "Wilson", "next": "Wellington"},
+        {"line": "Brown", "prior": "Wellington", "next": "Fullerton"}
+      ]
     },
     {
       "name": "Fullerton",
       "lat": 41.925051,
       "lon": -87.65296,
-      "lines": ["Red", "Purple", "Brown"]
+      "lines": [
+        {"line": "Red", "prior": "Belmont", "next": "North/Clybourn"},
+        {"line": "Purple", "prior": "Diversey", "next": "Armitage"},
+        {"line": "Brown", "prior": "Belmont", "next": "Armitage"}
+      ]
     },
     {
       "name": "North/Clybourn",
       "lat": 41.910655,
       "lon": -87.649177,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Fullerton", "next": "Clark/Division"}
+      ]
     },
     {
       "name": "Clark/Division",
       "lat": 41.904162,
       "lon": -87.631412,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "North/Clybourn", "next": "Chicago"} // Red Line Chicago
+      ]
     },
     {
-      "name": "Chicago",
+      "name": "Chicago", // Red Line
       "lat": 41.896658,
       "lon": -87.628193,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Clark/Division", "next": "Grand"} // Red Line Grand
+      ]
     },
     {
-      "name": "Grand",
+      "name": "Grand", // Red Line
       "lat": 41.89186,
       "lon": -87.627927,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Chicago", "next": "Lake"} // Red Line Lake
+      ]
     },
     {
-      "name": "Lake",
+      "name": "Lake", // Red Line
       "lat": 41.885089,
       "lon": -87.627816,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Grand", "next": "Monroe"} // Red Line Monroe
+        // Transfer available to State/Lake station (Brown, Green, Orange, Pink, Purple lines) via walkway
+      ]
     },
     {
-      "name": "Monroe",
+      "name": "Monroe", // Red Line
       "lat": 41.880608,
       "lon": -87.627665,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Lake", "next": "Jackson"} // Red Line Jackson
+        // Transfer available to Blue Line Monroe station via walkway
+      ]
     },
     {
-      "name": "Jackson",
-      "lat": 41.878183,
+      "name": "Jackson", // Red/Blue Lines (Subway Transfer Complex)
+      "lat": 41.878183, // Approx centroid, Red Line platform is closer to this
       "lon": -87.627731,
-      "lines": ["Red", "Blue"]
+      "lines": [
+        {"line": "Red", "prior": "Monroe", "next": "Harrison"},
+        {"line": "Blue", "prior": "Monroe", "next": "LaSalle"} // Blue Line Jackson connects via pedway
+      ]
     },
     {
       "name": "Harrison",
       "lat": 41.87414,
       "lon": -87.627492,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Jackson", "next": "Roosevelt"}
+      ]
     },
     {
       "name": "Roosevelt",
       "lat": 41.867368,
       "lon": -87.626882,
-      "lines": ["Red", "Green", "Orange"]
+      "lines": [
+        {"line": "Red", "prior": "Harrison", "next": "Cermak-Chinatown"},
+        {"line": "Green", "prior": "Adams/Wabash", "next": "Cermak-McCormick Place"},
+        {"line": "Orange", "prior": "Halsted", "next": "Harold Washington Library-State/Van Buren"} // Orange enters Loop here
+      ]
     },
     {
       "name": "Cermak-Chinatown",
       "lat": 41.853031,
       "lon": -87.630835,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Roosevelt", "next": "Sox-35th"}
+      ]
     },
     {
       "name": "Sox-35th",
       "lat": 41.831428,
       "lon": -87.630922,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Cermak-Chinatown", "next": "47th"} // Red Line 47th
+        // Transfer available to 35th-Bronzeville-IIT Green Line station via walkway
+      ]
     },
     {
-      "name": "47th",
+      "name": "47th", // Red Line
       "lat": 41.809301,
       "lon": -87.630866,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Sox-35th", "next": "Garfield"} // Red Line Garfield
+      ]
     },
     {
-      "name": "Garfield",
+      "name": "Garfield", // Red Line
       "lat": 41.79542,
       "lon": -87.63087,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "47th", "next": "63rd"}
+      ]
     },
     {
       "name": "63rd",
       "lat": 41.780536,
       "lon": -87.630952,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "Garfield", "next": "69th"}
+      ]
     },
     {
       "name": "69th",
       "lat": 41.768367,
       "lon": -87.625724,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "63rd", "next": "79th"}
+      ]
     },
     {
       "name": "79th",
       "lat": 41.750419,
       "lon": -87.625112,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "69th", "next": "87th"}
+      ]
     },
     {
       "name": "87th",
       "lat": 41.735372,
       "lon": -87.624717,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "79th", "next": "95th/Dan Ryan"}
+      ]
     },
     {
       "name": "95th/Dan Ryan",
       "lat": 41.722377,
       "lon": -87.624342,
-      "lines": ["Red"]
+      "lines": [
+        {"line": "Red", "prior": "87th", "next": null} // Terminus
+      ]
     },
+    // --- Blue Line ---
     {
       "name": "O'Hare",
       "lat": 41.977668,
       "lon": -87.904222,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": null, "next": "Rosemont"} // Terminus
+      ]
     },
     {
       "name": "Rosemont",
       "lat": 41.983581,
       "lon": -87.859388,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "O'Hare", "next": "Cumberland"}
+      ]
     },
     {
       "name": "Cumberland",
       "lat": 41.984246,
       "lon": -87.838028,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Rosemont", "next": "Harlem (O'Hare Branch)"}
+      ]
     },
     {
       "name": "Harlem (O'Hare Branch)",
       "lat": 41.982391,
       "lon": -87.805388,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Cumberland", "next": "Jefferson Park"}
+      ]
     },
     {
       "name": "Jefferson Park",
       "lat": 41.970634,
       "lon": -87.760892,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Harlem (O'Hare Branch)", "next": "Montrose"} // Blue Line Montrose
+      ]
     },
     {
-      "name": "Montrose",
+      "name": "Montrose", // Blue Line
       "lat": 41.962396,
       "lon": -87.743574,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Jefferson Park", "next": "Irving Park"} // Blue Line Irving Park
+      ]
     },
     {
-      "name": "Irving Park",
+      "name": "Irving Park", // Blue Line
       "lat": 41.952924,
       "lon": -87.729072,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Montrose", "next": "Addison"} // Blue Line Addison
+      ]
     },
     {
-      "name": "Addison",
+      "name": "Addison", // Blue Line
       "lat": 41.94738,
       "lon": -87.71906,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Irving Park", "next": "Belmont"} // Blue Line Belmont
+      ]
     },
     {
-      "name": "Belmont",
+      "name": "Belmont", // Blue Line
       "lat": 41.938132,
       "lon": -87.712644,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Addison", "next": "Logan Square"}
+      ]
     },
     {
       "name": "Logan Square",
       "lat": 41.929728,
       "lon": -87.708646,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Belmont", "next": "California"} // Blue Line California
+      ]
     },
     {
-      "name": "California",
+      "name": "California", // Blue Line
       "lat": 41.921939,
       "lon": -87.699777,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Logan Square", "next": "Western (O'Hare Branch)"}
+      ]
     },
     {
       "name": "Western (O'Hare Branch)",
       "lat": 41.916157,
       "lon": -87.687364,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "California", "next": "Damen"} // Blue Line Damen
+      ]
     },
     {
-      "name": "Damen",
+      "name": "Damen", // Blue Line
       "lat": 41.909744,
       "lon": -87.677896,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Western (O'Hare Branch)", "next": "Division"}
+      ]
     },
     {
       "name": "Division",
       "lat": 41.903355,
       "lon": -87.66,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Damen", "next": "Chicago"} // Blue Line Chicago
+      ]
     },
     {
-      "name": "Chicago",
+      "name": "Chicago", // Blue Line
       "lat": 41.896075,
       "lon": -87.655211,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Division", "next": "Grand"} // Blue Line Grand
+      ]
     },
     {
-      "name": "Grand",
+      "name": "Grand", // Blue Line
       "lat": 41.891189,
       "lon": -87.647578,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Chicago", "next": "Clark/Lake"}
+      ]
     },
     {
-      "name": "Clark/Lake",
+      "name": "Clark/Lake", // Major Transfer Hub
       "lat": 41.885737,
       "lon": -87.630886,
-      "lines": ["Blue", "Brown", "Green", "Orange", "Purple", "Pink"]
+      "lines": [
+        {"line": "Blue", "prior": "Grand", "next": "Washington"},
+        {"line": "Brown", "prior": "Merchandise Mart", "next": "State/Lake"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Green", "prior": "Clinton", "next": "State/Lake"},
+        {"line": "Orange", "prior": "Washington/Wells", "next": "State/Lake"}, // Loop Inner (Clockwise)
+        {"line": "Purple", "prior": "Merchandise Mart", "next": "State/Lake"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Pink", "prior": "Washington/Wells", "next": "State/Lake"} // Loop Inner (Clockwise)
+      ]
     },
     {
-      "name": "Washington",
+      "name": "Washington", // Blue Line
       "lat": 41.883164,
       "lon": -87.62944,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Clark/Lake", "next": "Monroe"} // Blue Line Monroe
+        // Transfer available to Red Line Lake station via walkway
+      ]
     },
     {
-      "name": "Monroe",
+      "name": "Monroe", // Blue Line
       "lat": 41.880488,
       "lon": -87.62939,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Washington", "next": "Jackson"} // Blue Line Jackson
+        // Transfer available to Red Line Monroe station via walkway
+      ]
     },
+    // Jackson (Blue Line) - Already listed under Red Line section as transfer complex
     {
-      "name": "LaSalle",
+      "name": "LaSalle", // Blue Line
       "lat": 41.875568,
       "lon": -87.631491,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Jackson", "next": "Clinton"} // Blue Line Clinton
+        // Transfer available to LaSalle/Van Buren Loop station (Brown, Orange, Pink, Purple)
+      ]
     },
     {
-      "name": "Clinton",
+      "name": "Clinton", // Blue Line
       "lat": 41.875587,
       "lon": -87.640984,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "LaSalle", "next": "UIC-Halsted"}
+      ]
     },
     {
       "name": "UIC-Halsted",
       "lat": 41.875565,
       "lon": -87.649707,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Clinton", "next": "Racine"}
+      ]
     },
     {
       "name": "Racine",
       "lat": 41.87592,
       "lon": -87.659458,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "UIC-Halsted", "next": "Illinois Medical District"}
+        // Note: Racine station may have ongoing construction/access changes. Check CTA alerts.
+      ]
     },
     {
       "name": "Illinois Medical District",
       "lat": 41.875746,
       "lon": -87.673936,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Racine", "next": "Western (Forest Park Branch)"}
+      ]
     },
     {
       "name": "Western (Forest Park Branch)",
       "lat": 41.8758,
       "lon": -87.6853,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Illinois Medical District", "next": "Kedzie-Homan"}
+      ]
     },
     {
       "name": "Kedzie-Homan",
       "lat": 41.875,
       "lon": -87.705,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Western (Forest Park Branch)", "next": "Pulaski"} // Blue Line Pulaski
+      ]
     },
     {
-      "name": "Pulaski",
+      "name": "Pulaski", // Blue Line
       "lat": 41.873976,
       "lon": -87.725681,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Kedzie-Homan", "next": "Cicero"} // Blue Line Cicero
+      ]
     },
     {
-      "name": "Cicero",
+      "name": "Cicero", // Blue Line
       "lat": 41.871661,
       "lon": -87.74514,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Pulaski", "next": "Austin"} // Blue Line Austin
+      ]
     },
     {
-      "name": "Austin",
+      "name": "Austin", // Blue Line
       "lat": 41.870929,
       "lon": -87.774135,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Cicero", "next": "Oak Park"} // Blue Line Oak Park
+      ]
     },
     {
-      "name": "Oak Park",
+      "name": "Oak Park", // Blue Line
       "lat": 41.872118,
       "lon": -87.791603,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Austin", "next": "Harlem (Forest Park Branch)"}
+      ]
     },
     {
       "name": "Harlem (Forest Park Branch)",
       "lat": 41.87349,
       "lon": -87.805728,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Oak Park", "next": "Forest Park"}
+      ]
     },
     {
       "name": "Forest Park",
       "lat": 41.874257,
       "lon": -87.817318,
-      "lines": ["Blue"]
+      "lines": [
+        {"line": "Blue", "prior": "Harlem (Forest Park Branch)", "next": null} // Terminus
+      ]
     },
+    // --- Brown Line ---
     {
       "name": "Kimball",
       "lat": 41.96384,
       "lon": -87.7138,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": null, "next": "Kedzie"} // Brown Line Kedzie, Terminus
+      ]
     },
     {
-      "name": "Kedzie",
+      "name": "Kedzie", // Brown Line
       "lat": 41.9639,
       "lon": -87.708,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Kimball", "next": "Francisco"}
+      ]
     },
     {
       "name": "Francisco",
       "lat": 41.96605,
       "lon": -87.701648,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Kedzie", "next": "Rockwell"}
+      ]
     },
     {
       "name": "Rockwell",
       "lat": 41.966183,
       "lon": -87.693883,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Francisco", "next": "Western"} // Brown Line Western
+      ]
     },
     {
-      "name": "Western",
+      "name": "Western", // Brown Line
       "lat": 41.966163,
       "lon": -87.688886,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Rockwell", "next": "Damen"} // Brown Line Damen
+      ]
     },
     {
-      "name": "Damen",
+      "name": "Damen", // Brown Line
       "lat": 41.966374,
       "lon": -87.679663,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Western", "next": "Montrose"} // Brown Line Montrose
+      ]
     },
     {
-      "name": "Montrose",
+      "name": "Montrose", // Brown Line
       "lat": 41.961539,
       "lon": -87.67504,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Damen", "next": "Irving Park"} // Brown Line Irving Park
+      ]
     },
     {
-      "name": "Irving Park",
+      "name": "Irving Park", // Brown Line
       "lat": 41.95454,
       "lon": -87.674885,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Montrose", "next": "Addison"} // Brown Line Addison
+      ]
     },
     {
-      "name": "Addison",
+      "name": "Addison", // Brown Line
       "lat": 41.947612,
       "lon": -87.674052,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Irving Park", "next": "Paulina"}
+      ]
     },
     {
       "name": "Paulina",
       "lat": 41.94361,
       "lon": -87.670907,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Addison", "next": "Southport"}
+      ]
     },
     {
       "name": "Southport",
       "lat": 41.943641,
       "lon": -87.66405,
-      "lines": ["Brown"]
+      "lines": [
+        {"line": "Brown", "prior": "Paulina", "next": "Belmont"} // Brown/Red/Purple Belmont
+      ]
     },
+    // Belmont (Brown Line) - Already listed
     {
       "name": "Wellington",
       "lat": 41.93641,
       "lon": -87.653276,
-      "lines": ["Brown", "Purple"]
+      "lines": [
+        {"line": "Brown", "prior": "Belmont", "next": "Diversey"},
+        {"line": "Purple", "prior": "Belmont", "next": "Diversey"} // Purple Line Express stops here
+      ]
     },
     {
       "name": "Diversey",
       "lat": 41.932565,
       "lon": -87.653133,
-      "lines": ["Brown", "Purple"]
+      "lines": [
+        {"line": "Brown", "prior": "Wellington", "next": "Fullerton"},
+        {"line": "Purple", "prior": "Wellington", "next": "Fullerton"} // Purple Line Express stops here
+      ]
     },
+    // Fullerton (Brown/Purple) - Already listed
     {
       "name": "Armitage",
       "lat": 41.918217,
       "lon": -87.652644,
-      "lines": ["Brown", "Purple"]
+      "lines": [
+        {"line": "Brown", "prior": "Fullerton", "next": "Sedgwick"},
+        {"line": "Purple", "prior": "Fullerton", "next": "Sedgwick"} // Purple Line Express stops here
+      ]
     },
     {
       "name": "Sedgwick",
       "lat": 41.910468,
       "lon": -87.638764,
-      "lines": ["Brown", "Purple"]
+      "lines": [
+        {"line": "Brown", "prior": "Armitage", "next": "Chicago"}, // Brown/Purple Chicago
+        {"line": "Purple", "prior": "Armitage", "next": "Chicago"} // Purple Line Express stops here
+      ]
     },
     {
-      "name": "Chicago",
+      "name": "Chicago", // Brown/Purple
       "lat": 41.900666,
       "lon": -87.635916,
-      "lines": ["Brown", "Purple"]
+      "lines": [
+        {"line": "Brown", "prior": "Sedgwick", "next": "Merchandise Mart"},
+        {"line": "Purple", "prior": "Sedgwick", "next": "Merchandise Mart"} // Purple Line Express stops here
+      ]
     },
     {
       "name": "Merchandise Mart",
       "lat": 41.888969,
       "lon": -87.633924,
-      "lines": ["Brown", "Purple"]
+      "lines": [
+        {"line": "Brown", "prior": "Chicago", "next": "Clark/Lake"}, // Entering Loop (Outer track)
+        {"line": "Purple", "prior": "Chicago", "next": "Clark/Lake"} // Entering Loop (Outer track)
+      ]
+    },
+    // Clark/Lake (Loop) - Already listed
+    {
+      "name": "State/Lake", // Loop Transfer
+      "lat": 41.88574,
+      "lon": -87.627835,
+      "lines": [
+        {"line": "Brown", "prior": "Clark/Lake", "next": "Washington/Wabash"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Green", "prior": "Clark/Lake", "next": "Washington/Wabash"},
+        {"line": "Orange", "prior": "Clark/Lake", "next": "Washington/Wabash"}, // Loop Inner (Clockwise)
+        {"line": "Purple", "prior": "Clark/Lake", "next": "Washington/Wabash"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Pink", "prior": "Clark/Lake", "next": "Washington/Wabash"} // Loop Inner (Clockwise)
+        // Transfer available to Red Line Lake station via walkway
+      ]
     },
     {
-      "name": "Washington/Wells",
-      "lat": 41.882717,
-      "lon": -87.63378,
-      "lines": ["Brown", "Orange", "Purple", "Pink"]
+       "name": "Washington/Wabash", // Loop Transfer (replaced Madison/Wabash and Randolph/Wabash)
+       "lat": 41.883893, // Adjusted Lat/Lon for the new combined station
+       "lon": -87.626169,
+       "lines": [
+          {"line": "Brown", "prior": "State/Lake", "next": "Adams/Wabash"}, // Loop Outer (Counter-Clockwise)
+          {"line": "Green", "prior": "State/Lake", "next": "Adams/Wabash"},
+          {"line": "Orange", "prior": "State/Lake", "next": "Adams/Wabash"}, // Loop Inner (Clockwise)
+          {"line": "Purple", "prior": "State/Lake", "next": "Adams/Wabash"}, // Loop Outer (Counter-Clockwise)
+          {"line": "Pink", "prior": "State/Lake", "next": "Adams/Wabash"} // Loop Inner (Clockwise)
+       ]
     },
-    {
-      "name": "Quincy",
-      "lat": 41.878723,
-      "lon": -87.63374,
-      "lines": ["Brown", "Orange", "Purple", "Pink"]
-    },
-    {
-      "name": "LaSalle/Van Buren",
-      "lat": 41.876866,
-      "lon": -87.631739,
-      "lines": ["Brown", "Orange", "Purple", "Pink"]
-    },
-    {
-      "name": "Harold Washington Library-State/Van Buren",
-      "lat": 41.876862,
-      "lon": -87.628792,
-      "lines": ["Brown", "Orange", "Purple", "Pink"]
-    },
-    {
-      "name": "Adams/Wabash",
-      "lat": 41.879507,
-      "lon": -87.626037,
-      "lines": ["Brown", "Green", "Orange", "Purple", "Pink"]
-    },
-    {
+    // Madison/Wabash is now closed, replaced by Washington/Wabash. Removing the old entry.
+    /*{
       "name": "Madison/Wabash",
       "lat": 41.882043,
       "lon": -87.62616,
-      "lines": ["Brown", "Green", "Orange", "Purple", "Pink"]
+      "lines": ["Brown", "Green", "Orange", "Purple", "Pink"] // This station is closed
+    },*/
+    {
+      "name": "Adams/Wabash", // Loop Transfer
+      "lat": 41.879507,
+      "lon": -87.626037,
+      "lines": [
+        {"line": "Brown", "prior": "Washington/Wabash", "next": "Harold Washington Library-State/Van Buren"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Green", "prior": "Washington/Wabash", "next": "Roosevelt"}, // Green Line continues south
+        {"line": "Orange", "prior": "Washington/Wabash", "next": "Harold Washington Library-State/Van Buren"}, // Loop Inner (Clockwise)
+        {"line": "Purple", "prior": "Washington/Wabash", "next": "Harold Washington Library-State/Van Buren"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Pink", "prior": "Washington/Wabash", "next": "Harold Washington Library-State/Van Buren"} // Loop Inner (Clockwise)
+      ]
     },
     {
-      "name": "State/Lake",
-      "lat": 41.88574,
-      "lon": -87.627835,
-      "lines": ["Brown", "Green", "Orange", "Purple", "Pink"]
+      "name": "Harold Washington Library-State/Van Buren", // Loop Transfer
+      "lat": 41.876862,
+      "lon": -87.628792,
+      "lines": [
+        {"line": "Brown", "prior": "Adams/Wabash", "next": "LaSalle/Van Buren"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Orange", "prior": "Adams/Wabash", "next": "LaSalle/Van Buren"}, // Loop Inner (Clockwise)
+        {"line": "Purple", "prior": "Adams/Wabash", "next": "LaSalle/Van Buren"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Pink", "prior": "Adams/Wabash", "next": "LaSalle/Van Buren"} // Loop Inner (Clockwise)
+        // Transfer available to Red Line Jackson & Blue Line Jackson via walk
+      ]
     },
     {
-      "name": "Ashland/63rd",
-      "lat": 41.77886,
-      "lon": -87.663816,
-      "lines": ["Green"]
+      "name": "LaSalle/Van Buren", // Loop Transfer
+      "lat": 41.876866,
+      "lon": -87.631739,
+      "lines": [
+        {"line": "Brown", "prior": "Harold Washington Library-State/Van Buren", "next": "Quincy"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Orange", "prior": "Harold Washington Library-State/Van Buren", "next": "Quincy"}, // Loop Inner (Clockwise)
+        {"line": "Purple", "prior": "Harold Washington Library-State/Van Buren", "next": "Quincy"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Pink", "prior": "Harold Washington Library-State/Van Buren", "next": "Quincy"} // Loop Inner (Clockwise)
+        // Transfer available to Blue Line LaSalle
+      ]
     },
     {
-      "name": "Halsted",
-      "lat": 41.778943,
-      "lon": -87.646936,
-      "lines": ["Green"]
+      "name": "Quincy", // Loop Transfer
+      "lat": 41.878723,
+      "lon": -87.63374,
+      "lines": [
+        {"line": "Brown", "prior": "LaSalle/Van Buren", "next": "Washington/Wells"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Orange", "prior": "LaSalle/Van Buren", "next": "Washington/Wells"}, // Loop Inner (Clockwise)
+        {"line": "Purple", "prior": "LaSalle/Van Buren", "next": "Washington/Wells"}, // Loop Outer (Counter-Clockwise)
+        {"line": "Pink", "prior": "LaSalle/Van Buren", "next": "Washington/Wells"} // Loop Inner (Clockwise)
+      ]
     },
     {
-      "name": "Garfield",
-      "lat": 41.795377,
-      "lon": -87.61867,
-      "lines": ["Green"]
+      "name": "Washington/Wells", // Loop Transfer
+      "lat": 41.882717,
+      "lon": -87.63378,
+      "lines": [
+        {"line": "Brown", "prior": "Quincy", "next": "Merchandise Mart"}, // Loop Outer (Counter-Clockwise) -> Exits Loop
+        {"line": "Orange", "prior": "Quincy", "next": "Clark/Lake"}, // Loop Inner (Clockwise)
+        {"line": "Purple", "prior": "Quincy", "next": "Merchandise Mart"}, // Loop Outer (Counter-Clockwise) -> Exits Loop
+        {"line": "Pink", "prior": "Quincy", "next": "Clark/Lake"} // Loop Inner (Clockwise)
+      ]
     },
+    // --- Green Line ---
     {
-      "name": "51st",
-      "lat": 41.80203,
-      "lon": -87.618486,
-      "lines": ["Green"]
-    },
-    {
-      "name": "47th",
-      "lat": 41.80935,
-      "lon": -87.618485,
-      "lines": ["Green"]
-    },
-    {
-      "name": "43rd",
-      "lat": 41.816462,
-      "lon": -87.618484,
-      "lines": ["Green"]
-    },
-    {
-      "name": "Indiana",
-      "lat": 41.821726,
-      "lon": -87.621561,
-      "lines": ["Green"]
-    },
-    {
-      "name": "35th-Bronzeville-IIT",
-      "lat": 41.831678,
-      "lon": -87.625826,
-      "lines": ["Green"]
-    },
-    {
-      "name": "Cermak-McCormick Place",
-      "lat": 41.853115,
-      "lon": -87.626402,
-      "lines": ["Green"]
-    },
-    {
-      "name": "Clinton",
-      "lat": 41.885675,
-      "lon": -87.641782,
-      "lines": ["Green", "Pink"]
-    },
-    {
-      "name": "Harlem/Lake",
+      "name": "Harlem/Lake", // Green Line Terminus
       "lat": 41.88706,
       "lon": -87.804863,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": null, "next": "Oak Park"} // Green Line Oak Park
+      ]
     },
     {
-      "name": "Oak Park",
+      "name": "Oak Park", // Green Line
       "lat": 41.88693,
       "lon": -87.790322,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Harlem/Lake", "next": "Ridgeland"}
+      ]
     },
     {
       "name": "Ridgeland",
       "lat": 41.886947,
       "lon": -87.779698,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Oak Park", "next": "Austin"} // Green Line Austin
+      ]
     },
     {
-      "name": "Austin",
+      "name": "Austin", // Green Line
       "lat": 41.886979,
       "lon": -87.774109,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Ridgeland", "next": "Central"} // Green Line Central
+      ]
     },
     {
-      "name": "Central",
+      "name": "Central", // Green Line
       "lat": 41.887389,
       "lon": -87.765351,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Austin", "next": "Laramie"}
+      ]
     },
     {
       "name": "Laramie",
       "lat": 41.887163,
       "lon": -87.754986,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Central", "next": "Cicero"} // Green Line Cicero
+      ]
     },
     {
-      "name": "Cicero",
+      "name": "Cicero", // Green/Pink
       "lat": 41.88663,
       "lon": -87.744664,
-      "lines": ["Green", "Pink"]
+      "lines": [
+        {"line": "Green", "prior": "Laramie", "next": "Pulaski"}, // Green Line Pulaski
+        {"line": "Pink", "prior": "54th/Cermak", "next": "Kostner"} // Pink line Cicero is different station on Cermak branch
+        // NOTE: This entry seems to represent the Green Line station. The Pink Line Cicero station is separate. Added Pink Line Cicero below.
+      ]
     },
     {
-      "name": "Pulaski",
+      "name": "Pulaski", // Green Line
       "lat": 41.885412,
       "lon": -87.725404,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Cicero", "next": "Conservatory-Central Park Drive"}
+      ]
     },
     {
       "name": "Conservatory-Central Park Drive",
       "lat": 41.884904,
       "lon": -87.716523,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Pulaski", "next": "Kedzie"} // Green Line Kedzie
+      ]
     },
     {
-      "name": "Kedzie",
+      "name": "Kedzie", // Green Line
       "lat": 41.884304,
       "lon": -87.705408,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Conservatory-Central Park Drive", "next": "California"} // Green Line California
+      ]
     },
     {
-      "name": "California",
+      "name": "California", // Green Line
       "lat": 41.884241,
       "lon": -87.696234,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Kedzie", "next": "Ashland"} // Green/Pink Ashland
+      ]
     },
     {
-      "name": "Ashland",
+      "name": "Ashland", // Green/Pink
       "lat": 41.885295,
       "lon": -87.666969,
-      "lines": ["Green", "Pink"]
+      "lines": [
+        {"line": "Green", "prior": "California", "next": "Morgan"},
+        {"line": "Pink", "prior": "Polk", "next": "Morgan"}
+      ]
     },
     {
       "name": "Morgan",
       "lat": 41.885586,
       "lon": -87.652193,
-      "lines": ["Green", "Pink"]
+      "lines": [
+        {"line": "Green", "prior": "Ashland", "next": "Clinton"}, // Green/Pink Clinton
+        {"line": "Pink", "prior": "Ashland", "next": "Clinton"} // Green/Pink Clinton
+      ]
     },
     {
-      "name": "Cottage Grove",
-      "lat": 41.780301,
-      "lon": -87.606005,
-      "lines": ["Green"]
+      "name": "Clinton", // Green/Pink
+      "lat": 41.885675,
+      "lon": -87.641782,
+      "lines": [
+        {"line": "Green", "prior": "Morgan", "next": "Clark/Lake"}, // Enters Loop
+        {"line": "Pink", "prior": "Morgan", "next": "Clark/Lake"} // Enters Loop
+      ]
+    },
+    // Clark/Lake (Green/Pink entering Loop) - Already listed
+    // State/Lake (Loop) - Already listed
+    // Washington/Wabash (Loop) - Already listed
+    // Adams/Wabash (Loop - Green Line exits Loop south) - Already listed
+    // Roosevelt (Green Line south of Loop) - Already listed
+    {
+      "name": "Cermak-McCormick Place",
+      "lat": 41.853115,
+      "lon": -87.626402,
+      "lines": [
+        {"line": "Green", "prior": "Roosevelt", "next": "35th-Bronzeville-IIT"}
+      ]
     },
     {
-      "name": "King Drive",
+      "name": "35th-Bronzeville-IIT",
+      "lat": 41.831678,
+      "lon": -87.625826,
+      "lines": [
+        {"line": "Green", "prior": "Cermak-McCormick Place", "next": "Indiana"}
+        // Transfer available to Red Line Sox-35th station via walkway
+      ]
+    },
+    {
+      "name": "Indiana",
+      "lat": 41.821726,
+      "lon": -87.621561,
+      "lines": [
+        {"line": "Green", "prior": "35th-Bronzeville-IIT", "next": "43rd"}
+      ]
+    },
+    {
+      "name": "43rd",
+      "lat": 41.816462,
+      "lon": -87.618484,
+      "lines": [
+        {"line": "Green", "prior": "Indiana", "next": "47th"} // Green Line 47th
+      ]
+    },
+    {
+      "name": "47th", // Green Line
+      "lat": 41.80935,
+      "lon": -87.618485,
+      "lines": [
+        {"line": "Green", "prior": "43rd", "next": "51st"}
+      ]
+    },
+    {
+      "name": "51st",
+      "lat": 41.80203,
+      "lon": -87.618486,
+      "lines": [
+        {"line": "Green", "prior": "47th", "next": "Garfield"} // Green Line Garfield
+      ]
+    },
+    {
+      "name": "Garfield", // Green Line (Split point for branches)
+      "lat": 41.795377,
+      "lon": -87.61867,
+      "lines": [
+        {"line": "Green", "prior": "51st", "next": {"Ashland/63rd Branch": "Halsted", "Cottage Grove Branch": "King Drive"}} // Split point
+      ]
+    },
+    {
+      "name": "Halsted", // Green Line - Ashland Branch
+      "lat": 41.778943,
+      "lon": -87.646936,
+      "lines": [
+        {"line": "Green", "prior": "Garfield", "next": "Ashland/63rd"} // Ashland Branch
+      ]
+    },
+    {
+      "name": "Ashland/63rd", // Green Line Terminus - Ashland Branch
+      "lat": 41.77886,
+      "lon": -87.663816,
+      "lines": [
+        {"line": "Green", "prior": "Halsted", "next": null} // Ashland Branch Terminus
+      ]
+    },
+    {
+      "name": "King Drive", // Green Line - Cottage Grove Branch
       "lat": 41.78014,
       "lon": -87.615868,
-      "lines": ["Green"]
+      "lines": [
+        {"line": "Green", "prior": "Garfield", "next": "Cottage Grove"} // Cottage Grove Branch
+      ]
     },
+    {
+      "name": "Cottage Grove", // Green Line Terminus - Cottage Grove Branch
+      "lat": 41.780301,
+      "lon": -87.606005,
+      "lines": [
+        {"line": "Green", "prior": "King Drive", "next": null} // Cottage Grove Branch Terminus
+      ]
+    },
+    // --- Orange Line ---
     {
       "name": "Midway",
       "lat": 41.78661,
       "lon": -87.737875,
-      "lines": ["Orange"]
+      "lines": [
+        {"line": "Orange", "prior": null, "next": "Pulaski"} // Orange Line Pulaski, Terminus
+      ]
     },
     {
-      "name": "Pulaski",
+      "name": "Pulaski", // Orange Line
       "lat": 41.802363,
       "lon": -87.724414,
-      "lines": ["Orange"]
+      "lines": [
+        {"line": "Orange", "prior": "Midway", "next": "Kedzie"} // Orange Line Kedzie
+      ]
     },
     {
-      "name": "Kedzie",
+      "name": "Kedzie", // Orange Line
       "lat": 41.804236,
       "lon": -87.704406,
-      "lines": ["Orange"]
+      "lines": [
+        {"line": "Orange", "prior": "Pulaski", "next": "Western"} // Orange Line Western
+      ]
     },
     {
-      "name": "Western",
+      "name": "Western", // Orange Line
       "lat": 41.804,
       "lon": -87.685,
-      "lines": ["Orange"]
+      "lines": [
+        {"line": "Orange", "prior": "Kedzie", "next": "35th/Archer"}
+      ]
     },
     {
       "name": "35th/Archer",
       "lat": 41.829356,
       "lon": -87.683675,
-      "lines": ["Orange"]
+      "lines": [
+        {"line": "Orange", "prior": "Western", "next": "Ashland"} // Orange Line Ashland
+      ]
     },
     {
-      "name": "Ashland",
+      "name": "Ashland", // Orange Line
       "lat": 41.839234,
       "lon": -87.664666,
-      "lines": ["Orange"]
+      "lines": [
+        {"line": "Orange", "prior": "35th/Archer", "next": "Halsted"} // Orange Line Halsted
+      ]
     },
     {
-      "name": "Halsted",
+      "name": "Halsted", // Orange Line
       "lat": 41.847,
       "lon": -87.646,
-      "lines": ["Orange"]
+      "lines": [
+        {"line": "Orange", "prior": "Ashland", "next": "Roosevelt"} // Enters Loop via Roosevelt
+      ]
     },
+    // Roosevelt (Orange Line joining Loop) - Already listed
+    // Loop stations for Orange Line (clockwise): Harold Washington Library -> LaSalle/Van Buren -> Quincy -> Washington/Wells -> Clark/Lake -> State/Lake -> Washington/Wabash -> Adams/Wabash -> Harold Washington Library -> Exits Loop via Roosevelt
+    // All Loop stations already listed. Orange Line follows Inner Loop (Clockwise).
+    // --- Pink Line ---
     {
       "name": "54th/Cermak",
       "lat": 41.851773,
       "lon": -87.752093,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": null, "next": "Cicero"} // Pink Line Cicero, Terminus
+      ]
     },
     {
-      "name": "Cicero",
+      "name": "Cicero", // Pink Line
       "lat": 41.851815,
       "lon": -87.745399,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "54th/Cermak", "next": "Kostner"}
+      ]
     },
     {
       "name": "Kostner",
       "lat": 41.853959,
       "lon": -87.733304,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "Cicero", "next": "Pulaski"} // Pink Line Pulaski
+      ]
     },
     {
-      "name": "Pulaski",
+      "name": "Pulaski", // Pink Line
       "lat": 41.853861,
       "lon": -87.724227,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "Kostner", "next": "Central Park"}
+      ]
     },
     {
       "name": "Central Park",
       "lat": 41.853809,
       "lon": -87.714813,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "Pulaski", "next": "Kedzie"} // Pink Line Kedzie
+      ]
     },
     {
-      "name": "Kedzie",
+      "name": "Kedzie", // Pink Line
       "lat": 41.85391,
       "lon": -87.70549,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "Central Park", "next": "California"} // Pink Line California
+      ]
     },
     {
-      "name": "California",
+      "name": "California", // Pink Line
       "lat": 41.85406,
       "lon": -87.69623,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "Kedzie", "next": "Western"} // Pink Line Western
+      ]
     },
     {
-      "name": "Western",
+      "name": "Western", // Pink Line
       "lat": 41.85412,
       "lon": -87.6852,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "California", "next": "Damen"} // Pink Line Damen
+      ]
     },
     {
-      "name": "Damen",
+      "name": "Damen", // Pink Line
       "lat": 41.854501,
       "lon": -87.675988,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "Western", "next": "18th"}
+      ]
     },
     {
       "name": "18th",
       "lat": 41.857908,
       "lon": -87.669147,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "Damen", "next": "Polk"}
+      ]
     },
     {
       "name": "Polk",
       "lat": 41.871512,
       "lon": -87.669552,
-      "lines": ["Pink"]
+      "lines": [
+        {"line": "Pink", "prior": "18th", "next": "Ashland"} // Pink/Green Ashland
+      ]
     },
+    // Ashland (Pink/Green) - Already listed
+    // Morgan (Pink/Green) - Already listed
+    // Clinton (Pink/Green entering Loop) - Already listed
+    // Loop stations for Pink Line (clockwise): Clark/Lake -> State/Lake -> Washington/Wabash -> Adams/Wabash -> Harold Washington Library -> LaSalle/Van Buren -> Quincy -> Washington/Wells -> Clark/Lake -> Exits Loop via Clinton
+    // All Loop stations already listed. Pink Line follows Inner Loop (Clockwise).
+    // --- Purple Line ---
     {
       "name": "Linden",
       "lat": 42.07281,
       "lon": -87.786879,
-      "lines": ["Purple"]
+      "lines": [
+        {"line": "Purple", "prior": null, "next": "Central"} // Purple Line Central, Terminus
+      ]
     },
     {
-      "name": "Central",
+      "name": "Central", // Purple Line
       "lat": 42.065341,
       "lon": -87.785695,
-      "lines": ["Purple"]
+      "lines": [
+        {"line": "Purple", "prior": "Linden", "next": "Noyes"}
+      ]
     },
     {
       "name": "Noyes",
       "lat": 42.058399,
       "lon": -87.683236,
-      "lines": ["Purple"]
+      "lines": [
+        {"line": "Purple", "prior": "Central", "next": "Foster"}
+      ]
     },
     {
       "name": "Foster",
       "lat": 42.05416,
       "lon": -87.683,
-      "lines": ["Purple"]
+      "lines": [
+        {"line": "Purple", "prior": "Noyes", "next": "Davis"}
+      ]
     },
     {
       "name": "Davis",
       "lat": 42.04771,
       "lon": -87.68356,
-      "lines": ["Purple"]
+      "lines": [
+        {"line": "Purple", "prior": "Foster", "next": "Dempster"}
+      ]
     },
     {
       "name": "Dempster",
       "lat": 42.041671,
       "lon": -87.681602,
-      "lines": ["Purple"]
+      "lines": [
+        {"line": "Purple", "prior": "Davis", "next": "Main"}
+      ]
     },
     {
       "name": "Main",
       "lat": 42.033365,
       "lon": -87.680476,
-      "lines": ["Purple"]
+      "lines": [
+        {"line": "Purple", "prior": "Dempster", "next": "South Boulevard"}
+      ]
     },
     {
       "name": "South Boulevard",
       "lat": 42.027612,
       "lon": -87.678307,
-      "lines": ["Purple"]
+      "lines": [
+        {"line": "Purple", "prior": "Main", "next": "Howard"} // To Howard (Transfer/End of local service)
+      ]
     },
+    // Howard (Purple Line connects) - Already listed
+    // Wilson (Purple Line Express stop) - Already listed
+    // Belmont (Purple Line Express stop) - Already listed
+    // Wellington (Purple Line Express stop) - Already listed
+    // Diversey (Purple Line Express stop) - Already listed
+    // Fullerton (Purple Line Express stop) - Already listed
+    // Armitage (Purple Line Express stop) - Already listed
+    // Sedgwick (Purple Line Express stop) - Already listed
+    // Chicago (Purple Line Express stop) - Already listed
+    // Merchandise Mart (Purple Line Express enters Loop) - Already listed
+    // Loop stations for Purple Line Express (counter-clockwise): Clark/Lake -> State/Lake -> Washington/Wabash -> Adams/Wabash -> Harold Washington Library -> LaSalle/Van Buren -> Quincy -> Washington/Wells -> Merchandise Mart -> Exits Loop
+    // All Loop stations already listed. Purple Line follows Outer Loop (Counter-Clockwise).
+    // --- Yellow Line ---
     {
-      "name": "Skokie",
+      "name": "Skokie", // Name is usually Skokie-Dempster
       "lat": 42.034,
       "lon": -87.758,
-      "lines": ["Yellow"]
+      "lines": [
+        {"line": "Yellow", "prior": null, "next": "Oakton-Skokie"} // Terminus
+      ]
     },
     {
       "name": "Oakton-Skokie",
       "lat": 42.026243,
       "lon": -87.747221,
-      "lines": ["Yellow"]
+      "lines": [
+        {"line": "Yellow", "prior": "Skokie", "next": "Howard"} // To Howard (Transfer/End of Line)
+      ]
     }
-  ]
+    // Howard (Yellow Line connects) - Already listed
+]
