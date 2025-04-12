@@ -8,3 +8,7 @@ Todo:
 4. Deploy (DONE)
 
 Hell yeah the deploy worked! That's super satis
+
+
+TODO:
+1. Migrate to Surge.sh for hosting

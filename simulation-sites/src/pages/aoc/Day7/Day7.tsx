@@ -3,18 +3,49 @@ import { SolutionCard } from '../common/SolutionCard'
 import testInput from './test-input.txt?raw'
 import input from './input.txt?raw'
 
-const solution: Solution<string, number> = {
-    parseInput: (content: string): string => content,
+type Input = {
+    target: number
+    values: number[]
+}[]
 
+function validEquation(target: number, values: number[]): boolean {
+    if (target == 0 && values.length == 0) return true
+    if (values.length == 0 || target < 0 || target % 1 != 0) return false
+    return validEquation(target - values[0], values.slice(1)) || validEquation(target / values[0], values.slice(1))
+}
+export function validEquation2(target: number, values: number[]): boolean {
+    console.log(target, values)
+    if (target == 0 && values.length == 0) return true
+    if (values.length == 0 || target < 0 || target % 1 != 0) return false
+    return validEquation2(target - values[0], values.slice(1))
+        || validEquation2(target / values[0], values.slice(1))
+    // TODO: How to make this faster?
+        // || (values.length > 1 && validEquation2(target, [Number(values[1].toString() + values[0].toString()), ...values.slice(2)]))
+}
+
+const solution: Solution<Input, number> = {
+    parseInput: (content: string): Input => {
+        const lines = content.split('\n')
+        return lines.map(line => {
+            const [key, values] = line.split(': ')
+            return {
+                target: Number(key),
+                values: values.split(' ').map(Number)
+            }
+        })
+    },
     implementations: [
         {
             name: "Implementation 1",
-            part1: (_input: string): number => {
-                return 0
+            part1: (input: Input): number => {
+                console.log(input[0])
+                const solution = input.filter(equation => validEquation(equation.target, equation.values.reverse())).map(equation => equation.target).reduce((a, b) => a + b, 0)
+                return solution
             },
 
-            part2: (_input: string): number => {
-                return 0
+            part2: (input: Input): number => {
+                const solution = input.filter(equation => validEquation2(equation.target, equation.values.reverse())).map(equation => equation.target).reduce((a, b) => a + b, 0)
+                return solution
             },
 
             explanation: {
@@ -27,8 +58,8 @@ const solution: Solution<string, number> = {
     testCases: {
         input: testInput,
         expected: {
-            part1: 0,
-            part2: 0
+            part1: 3749,
+            part2: 11387,
         }
     }
 };

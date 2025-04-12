@@ -38,9 +38,10 @@ export interface ImplementationResults {
 
 export function runSolution<T, R>(
   solution: Solution<T, R>,
-  input: string
+  input: string,
+  skipInput: boolean = false
 ): ImplementationResults[] {
-  const runPart = (solutionFn: (input: T) => R, testExpected?: R): SolutionResult => {
+  const runPart = (solutionFn: (input: T) => R, testExpected?: R, skipInput: boolean = false): SolutionResult => {
     // Run test case first if it exists
     let testResult;
     if (solution.testCases) {
@@ -56,7 +57,12 @@ export function runSolution<T, R>(
     // Run actual solution
     const parsedInput = solution.parseInput(input);
     const startTime = performance.now();
-    const result = solutionFn(parsedInput);
+    let result;
+    if(!skipInput) {
+      result = solutionFn(parsedInput);
+    } else {
+      result = -1;
+    }
     const endTime = performance.now();
     const runtime = (endTime - startTime).toFixed(2);
 
@@ -69,7 +75,7 @@ export function runSolution<T, R>(
 
   return solution.implementations.map(implementation => ({
     name: implementation.name,
-    part1: runPart(implementation.part1, solution.testCases?.expected.part1),
-    part2: runPart(implementation.part2, solution.testCases?.expected.part2),
+    part1: runPart(implementation.part1, solution.testCases?.expected.part1, skipInput),
+    part2: runPart(implementation.part2, solution.testCases?.expected.part2, skipInput),
   }));
 }

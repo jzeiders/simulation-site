@@ -7,6 +7,9 @@ interface Point {
     x: number;
     y: number;
 }
+function hashPoint(point: Point): string {
+    return `${point.x},${point.y}`;
+}
 interface GuardPoint extends Point {
     dir: Direction;
 }
@@ -33,7 +36,6 @@ function nextPoint(point: Point, dir: Direction): Point {
         case 'W': return { x: point.x - 1, y: point.y };
     }
 }
-
 function moveGuard(guard: GuardPoint, dir: Direction, blocks: Point[]): GuardPoint {
     const next = nextPoint(guard, dir);
     if (blocks.some(b => b.x === next.x && b.y === next.y)) {
@@ -41,6 +43,16 @@ function moveGuard(guard: GuardPoint, dir: Direction, blocks: Point[]): GuardPoi
     }
     return { ...next, dir: guard.dir };
 }
+
+function moveGuardQuick(guard: GuardPoint, dir: Direction, blocks: Point[]): GuardPoint {
+    const next = nextPoint(guard, dir);
+    if (blocks.some(b => b.x === next.x && b.y === next.y)) {
+        return rotateGuard(guard);
+    }
+    return { ...next, dir: guard.dir };
+}
+
+
 
 function cycleCheck(guard: GuardPoint, blocks: Point[], width: number, height: number): boolean {
     const visitedPoints = new Set<string>();
@@ -111,19 +123,20 @@ const solution: Solution<Day6Input, number> = {
         input: testInput,
         expected: {
             part1: 41,
-            part2: 0
+            part2: 6
         }
     }
 };
 
 export function Day6() {
-    const results = runSolution(solution, input);
+    const results = runSolution(solution, input, true);
 
     return (
         <SolutionCard
             day={6}
             title="Guard Gallivant"
             implementations={results}
+            
             githubUrl="https://github.com/jzeiders/simulation-site/blob/main/simulation-sites/src/pages/aoc/Day6/Day6.tsx"
         />
     );
