@@ -17,11 +17,20 @@ import { Route as IndexImport } from './routes/index'
 
 // Create Virtual Routes
 
+const TrainVisualizationLazyImport = createFileRoute('/train-visualization')()
 const BingoSqlLazyImport = createFileRoute('/bingo-sql')()
 const BingoLazyImport = createFileRoute('/bingo')()
 const Advent2024LazyImport = createFileRoute('/advent2024')()
 
 // Create/Update Routes
+
+const TrainVisualizationLazyRoute = TrainVisualizationLazyImport.update({
+  id: '/train-visualization',
+  path: '/train-visualization',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/train-visualization.lazy').then((d) => d.Route),
+)
 
 const BingoSqlLazyRoute = BingoSqlLazyImport.update({
   id: '/bingo-sql',
@@ -79,6 +88,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BingoSqlLazyImport
       parentRoute: typeof rootRoute
     }
+    '/train-visualization': {
+      id: '/train-visualization'
+      path: '/train-visualization'
+      fullPath: '/train-visualization'
+      preLoaderRoute: typeof TrainVisualizationLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -89,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/advent2024': typeof Advent2024LazyRoute
   '/bingo': typeof BingoLazyRoute
   '/bingo-sql': typeof BingoSqlLazyRoute
+  '/train-visualization': typeof TrainVisualizationLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -96,6 +113,7 @@ export interface FileRoutesByTo {
   '/advent2024': typeof Advent2024LazyRoute
   '/bingo': typeof BingoLazyRoute
   '/bingo-sql': typeof BingoSqlLazyRoute
+  '/train-visualization': typeof TrainVisualizationLazyRoute
 }
 
 export interface FileRoutesById {
@@ -104,14 +122,26 @@ export interface FileRoutesById {
   '/advent2024': typeof Advent2024LazyRoute
   '/bingo': typeof BingoLazyRoute
   '/bingo-sql': typeof BingoSqlLazyRoute
+  '/train-visualization': typeof TrainVisualizationLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/advent2024' | '/bingo' | '/bingo-sql'
+  fullPaths:
+    | '/'
+    | '/advent2024'
+    | '/bingo'
+    | '/bingo-sql'
+    | '/train-visualization'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/advent2024' | '/bingo' | '/bingo-sql'
-  id: '__root__' | '/' | '/advent2024' | '/bingo' | '/bingo-sql'
+  to: '/' | '/advent2024' | '/bingo' | '/bingo-sql' | '/train-visualization'
+  id:
+    | '__root__'
+    | '/'
+    | '/advent2024'
+    | '/bingo'
+    | '/bingo-sql'
+    | '/train-visualization'
   fileRoutesById: FileRoutesById
 }
 
@@ -120,6 +150,7 @@ export interface RootRouteChildren {
   Advent2024LazyRoute: typeof Advent2024LazyRoute
   BingoLazyRoute: typeof BingoLazyRoute
   BingoSqlLazyRoute: typeof BingoSqlLazyRoute
+  TrainVisualizationLazyRoute: typeof TrainVisualizationLazyRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -127,6 +158,7 @@ const rootRouteChildren: RootRouteChildren = {
   Advent2024LazyRoute: Advent2024LazyRoute,
   BingoLazyRoute: BingoLazyRoute,
   BingoSqlLazyRoute: BingoSqlLazyRoute,
+  TrainVisualizationLazyRoute: TrainVisualizationLazyRoute,
 }
 
 export const routeTree = rootRoute
@@ -142,7 +174,8 @@ export const routeTree = rootRoute
         "/",
         "/advent2024",
         "/bingo",
-        "/bingo-sql"
+        "/bingo-sql",
+        "/train-visualization"
       ]
     },
     "/": {
@@ -156,6 +189,9 @@ export const routeTree = rootRoute
     },
     "/bingo-sql": {
       "filePath": "bingo-sql.lazy.tsx"
+    },
+    "/train-visualization": {
+      "filePath": "train-visualization.lazy.tsx"
     }
   }
 }

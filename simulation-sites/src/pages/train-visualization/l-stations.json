@@ -1,0 +1,854 @@
+[
+    {
+      "name": "Howard",
+      "lat": 42.019063,
+      "lon": -87.672892,
+      "lines": ["Red", "Purple", "Yellow"]
+    },
+    {
+      "name": "Jarvis",
+      "lat": 42.015876,
+      "lon": -87.669905,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Morse",
+      "lat": 42.008362,
+      "lon": -87.665909,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Loyola",
+      "lat": 42.001073,
+      "lon": -87.661061,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Granville",
+      "lat": 41.993664,
+      "lon": -87.659202,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Thorndale",
+      "lat": 41.98574,
+      "lon": -87.659076,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Bryn Mawr",
+      "lat": 41.983506,
+      "lon": -87.658838,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Berwyn",
+      "lat": 41.977984,
+      "lon": -87.658527,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Argyle",
+      "lat": 41.973453,
+      "lon": -87.65853,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Lawrence",
+      "lat": 41.969139,
+      "lon": -87.658521,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Wilson",
+      "lat": 41.964272,
+      "lon": -87.657588,
+      "lines": ["Red", "Purple"]
+    },
+    {
+      "name": "Sheridan",
+      "lat": 41.95377,
+      "lon": -87.654929,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Addison",
+      "lat": 41.947428,
+      "lon": -87.653626,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Belmont",
+      "lat": 41.939751,
+      "lon": -87.65338,
+      "lines": ["Red", "Purple", "Brown"]
+    },
+    {
+      "name": "Fullerton",
+      "lat": 41.925051,
+      "lon": -87.65296,
+      "lines": ["Red", "Purple", "Brown"]
+    },
+    {
+      "name": "North/Clybourn",
+      "lat": 41.910655,
+      "lon": -87.649177,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Clark/Division",
+      "lat": 41.904162,
+      "lon": -87.631412,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Chicago",
+      "lat": 41.896658,
+      "lon": -87.628193,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Grand",
+      "lat": 41.89186,
+      "lon": -87.627927,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Lake",
+      "lat": 41.885089,
+      "lon": -87.627816,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Monroe",
+      "lat": 41.880608,
+      "lon": -87.627665,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Jackson",
+      "lat": 41.878183,
+      "lon": -87.627731,
+      "lines": ["Red", "Blue"]
+    },
+    {
+      "name": "Harrison",
+      "lat": 41.87414,
+      "lon": -87.627492,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Roosevelt",
+      "lat": 41.867368,
+      "lon": -87.626882,
+      "lines": ["Red", "Green", "Orange"]
+    },
+    {
+      "name": "Cermak-Chinatown",
+      "lat": 41.853031,
+      "lon": -87.630835,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Sox-35th",
+      "lat": 41.831428,
+      "lon": -87.630922,
+      "lines": ["Red"]
+    },
+    {
+      "name": "47th",
+      "lat": 41.809301,
+      "lon": -87.630866,
+      "lines": ["Red"]
+    },
+    {
+      "name": "Garfield",
+      "lat": 41.79542,
+      "lon": -87.63087,
+      "lines": ["Red"]
+    },
+    {
+      "name": "63rd",
+      "lat": 41.780536,
+      "lon": -87.630952,
+      "lines": ["Red"]
+    },
+    {
+      "name": "69th",
+      "lat": 41.768367,
+      "lon": -87.625724,
+      "lines": ["Red"]
+    },
+    {
+      "name": "79th",
+      "lat": 41.750419,
+      "lon": -87.625112,
+      "lines": ["Red"]
+    },
+    {
+      "name": "87th",
+      "lat": 41.735372,
+      "lon": -87.624717,
+      "lines": ["Red"]
+    },
+    {
+      "name": "95th/Dan Ryan",
+      "lat": 41.722377,
+      "lon": -87.624342,
+      "lines": ["Red"]
+    },
+    {
+      "name": "O'Hare",
+      "lat": 41.977668,
+      "lon": -87.904222,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Rosemont",
+      "lat": 41.983581,
+      "lon": -87.859388,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Cumberland",
+      "lat": 41.984246,
+      "lon": -87.838028,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Harlem (O'Hare Branch)",
+      "lat": 41.982391,
+      "lon": -87.805388,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Jefferson Park",
+      "lat": 41.970634,
+      "lon": -87.760892,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Montrose",
+      "lat": 41.962396,
+      "lon": -87.743574,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Irving Park",
+      "lat": 41.952924,
+      "lon": -87.729072,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Addison",
+      "lat": 41.94738,
+      "lon": -87.71906,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Belmont",
+      "lat": 41.938132,
+      "lon": -87.712644,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Logan Square",
+      "lat": 41.929728,
+      "lon": -87.708646,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "California",
+      "lat": 41.921939,
+      "lon": -87.699777,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Western (O'Hare Branch)",
+      "lat": 41.916157,
+      "lon": -87.687364,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Damen",
+      "lat": 41.909744,
+      "lon": -87.677896,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Division",
+      "lat": 41.903355,
+      "lon": -87.66,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Chicago",
+      "lat": 41.896075,
+      "lon": -87.655211,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Grand",
+      "lat": 41.891189,
+      "lon": -87.647578,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Clark/Lake",
+      "lat": 41.885737,
+      "lon": -87.630886,
+      "lines": ["Blue", "Brown", "Green", "Orange", "Purple", "Pink"]
+    },
+    {
+      "name": "Washington",
+      "lat": 41.883164,
+      "lon": -87.62944,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Monroe",
+      "lat": 41.880488,
+      "lon": -87.62939,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "LaSalle",
+      "lat": 41.875568,
+      "lon": -87.631491,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Clinton",
+      "lat": 41.875587,
+      "lon": -87.640984,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "UIC-Halsted",
+      "lat": 41.875565,
+      "lon": -87.649707,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Racine",
+      "lat": 41.87592,
+      "lon": -87.659458,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Illinois Medical District",
+      "lat": 41.875746,
+      "lon": -87.673936,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Western (Forest Park Branch)",
+      "lat": 41.8758,
+      "lon": -87.6853,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Kedzie-Homan",
+      "lat": 41.875,
+      "lon": -87.705,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Pulaski",
+      "lat": 41.873976,
+      "lon": -87.725681,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Cicero",
+      "lat": 41.871661,
+      "lon": -87.74514,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Austin",
+      "lat": 41.870929,
+      "lon": -87.774135,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Oak Park",
+      "lat": 41.872118,
+      "lon": -87.791603,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Harlem (Forest Park Branch)",
+      "lat": 41.87349,
+      "lon": -87.805728,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Forest Park",
+      "lat": 41.874257,
+      "lon": -87.817318,
+      "lines": ["Blue"]
+    },
+    {
+      "name": "Kimball",
+      "lat": 41.96384,
+      "lon": -87.7138,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Kedzie",
+      "lat": 41.9639,
+      "lon": -87.708,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Francisco",
+      "lat": 41.96605,
+      "lon": -87.701648,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Rockwell",
+      "lat": 41.966183,
+      "lon": -87.693883,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Western",
+      "lat": 41.966163,
+      "lon": -87.688886,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Damen",
+      "lat": 41.966374,
+      "lon": -87.679663,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Montrose",
+      "lat": 41.961539,
+      "lon": -87.67504,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Irving Park",
+      "lat": 41.95454,
+      "lon": -87.674885,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Addison",
+      "lat": 41.947612,
+      "lon": -87.674052,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Paulina",
+      "lat": 41.94361,
+      "lon": -87.670907,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Southport",
+      "lat": 41.943641,
+      "lon": -87.66405,
+      "lines": ["Brown"]
+    },
+    {
+      "name": "Wellington",
+      "lat": 41.93641,
+      "lon": -87.653276,
+      "lines": ["Brown", "Purple"]
+    },
+    {
+      "name": "Diversey",
+      "lat": 41.932565,
+      "lon": -87.653133,
+      "lines": ["Brown", "Purple"]
+    },
+    {
+      "name": "Armitage",
+      "lat": 41.918217,
+      "lon": -87.652644,
+      "lines": ["Brown", "Purple"]
+    },
+    {
+      "name": "Sedgwick",
+      "lat": 41.910468,
+      "lon": -87.638764,
+      "lines": ["Brown", "Purple"]
+    },
+    {
+      "name": "Chicago",
+      "lat": 41.900666,
+      "lon": -87.635916,
+      "lines": ["Brown", "Purple"]
+    },
+    {
+      "name": "Merchandise Mart",
+      "lat": 41.888969,
+      "lon": -87.633924,
+      "lines": ["Brown", "Purple"]
+    },
+    {
+      "name": "Washington/Wells",
+      "lat": 41.882717,
+      "lon": -87.63378,
+      "lines": ["Brown", "Orange", "Purple", "Pink"]
+    },
+    {
+      "name": "Quincy",
+      "lat": 41.878723,
+      "lon": -87.63374,
+      "lines": ["Brown", "Orange", "Purple", "Pink"]
+    },
+    {
+      "name": "LaSalle/Van Buren",
+      "lat": 41.876866,
+      "lon": -87.631739,
+      "lines": ["Brown", "Orange", "Purple", "Pink"]
+    },
+    {
+      "name": "Harold Washington Library-State/Van Buren",
+      "lat": 41.876862,
+      "lon": -87.628792,
+      "lines": ["Brown", "Orange", "Purple", "Pink"]
+    },
+    {
+      "name": "Adams/Wabash",
+      "lat": 41.879507,
+      "lon": -87.626037,
+      "lines": ["Brown", "Green", "Orange", "Purple", "Pink"]
+    },
+    {
+      "name": "Madison/Wabash",
+      "lat": 41.882043,
+      "lon": -87.62616,
+      "lines": ["Brown", "Green", "Orange", "Purple", "Pink"]
+    },
+    {
+      "name": "State/Lake",
+      "lat": 41.88574,
+      "lon": -87.627835,
+      "lines": ["Brown", "Green", "Orange", "Purple", "Pink"]
+    },
+    {
+      "name": "Ashland/63rd",
+      "lat": 41.77886,
+      "lon": -87.663816,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Halsted",
+      "lat": 41.778943,
+      "lon": -87.646936,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Garfield",
+      "lat": 41.795377,
+      "lon": -87.61867,
+      "lines": ["Green"]
+    },
+    {
+      "name": "51st",
+      "lat": 41.80203,
+      "lon": -87.618486,
+      "lines": ["Green"]
+    },
+    {
+      "name": "47th",
+      "lat": 41.80935,
+      "lon": -87.618485,
+      "lines": ["Green"]
+    },
+    {
+      "name": "43rd",
+      "lat": 41.816462,
+      "lon": -87.618484,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Indiana",
+      "lat": 41.821726,
+      "lon": -87.621561,
+      "lines": ["Green"]
+    },
+    {
+      "name": "35th-Bronzeville-IIT",
+      "lat": 41.831678,
+      "lon": -87.625826,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Cermak-McCormick Place",
+      "lat": 41.853115,
+      "lon": -87.626402,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Clinton",
+      "lat": 41.885675,
+      "lon": -87.641782,
+      "lines": ["Green", "Pink"]
+    },
+    {
+      "name": "Harlem/Lake",
+      "lat": 41.88706,
+      "lon": -87.804863,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Oak Park",
+      "lat": 41.88693,
+      "lon": -87.790322,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Ridgeland",
+      "lat": 41.886947,
+      "lon": -87.779698,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Austin",
+      "lat": 41.886979,
+      "lon": -87.774109,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Central",
+      "lat": 41.887389,
+      "lon": -87.765351,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Laramie",
+      "lat": 41.887163,
+      "lon": -87.754986,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Cicero",
+      "lat": 41.88663,
+      "lon": -87.744664,
+      "lines": ["Green", "Pink"]
+    },
+    {
+      "name": "Pulaski",
+      "lat": 41.885412,
+      "lon": -87.725404,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Conservatory-Central Park Drive",
+      "lat": 41.884904,
+      "lon": -87.716523,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Kedzie",
+      "lat": 41.884304,
+      "lon": -87.705408,
+      "lines": ["Green"]
+    },
+    {
+      "name": "California",
+      "lat": 41.884241,
+      "lon": -87.696234,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Ashland",
+      "lat": 41.885295,
+      "lon": -87.666969,
+      "lines": ["Green", "Pink"]
+    },
+    {
+      "name": "Morgan",
+      "lat": 41.885586,
+      "lon": -87.652193,
+      "lines": ["Green", "Pink"]
+    },
+    {
+      "name": "Cottage Grove",
+      "lat": 41.780301,
+      "lon": -87.606005,
+      "lines": ["Green"]
+    },
+    {
+      "name": "King Drive",
+      "lat": 41.78014,
+      "lon": -87.615868,
+      "lines": ["Green"]
+    },
+    {
+      "name": "Midway",
+      "lat": 41.78661,
+      "lon": -87.737875,
+      "lines": ["Orange"]
+    },
+    {
+      "name": "Pulaski",
+      "lat": 41.802363,
+      "lon": -87.724414,
+      "lines": ["Orange"]
+    },
+    {
+      "name": "Kedzie",
+      "lat": 41.804236,
+      "lon": -87.704406,
+      "lines": ["Orange"]
+    },
+    {
+      "name": "Western",
+      "lat": 41.804,
+      "lon": -87.685,
+      "lines": ["Orange"]
+    },
+    {
+      "name": "35th/Archer",
+      "lat": 41.829356,
+      "lon": -87.683675,
+      "lines": ["Orange"]
+    },
+    {
+      "name": "Ashland",
+      "lat": 41.839234,
+      "lon": -87.664666,
+      "lines": ["Orange"]
+    },
+    {
+      "name": "Halsted",
+      "lat": 41.847,
+      "lon": -87.646,
+      "lines": ["Orange"]
+    },
+    {
+      "name": "54th/Cermak",
+      "lat": 41.851773,
+      "lon": -87.752093,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "Cicero",
+      "lat": 41.851815,
+      "lon": -87.745399,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "Kostner",
+      "lat": 41.853959,
+      "lon": -87.733304,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "Pulaski",
+      "lat": 41.853861,
+      "lon": -87.724227,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "Central Park",
+      "lat": 41.853809,
+      "lon": -87.714813,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "Kedzie",
+      "lat": 41.85391,
+      "lon": -87.70549,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "California",
+      "lat": 41.85406,
+      "lon": -87.69623,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "Western",
+      "lat": 41.85412,
+      "lon": -87.6852,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "Damen",
+      "lat": 41.854501,
+      "lon": -87.675988,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "18th",
+      "lat": 41.857908,
+      "lon": -87.669147,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "Polk",
+      "lat": 41.871512,
+      "lon": -87.669552,
+      "lines": ["Pink"]
+    },
+    {
+      "name": "Linden",
+      "lat": 42.07281,
+      "lon": -87.786879,
+      "lines": ["Purple"]
+    },
+    {
+      "name": "Central",
+      "lat": 42.065341,
+      "lon": -87.785695,
+      "lines": ["Purple"]
+    },
+    {
+      "name": "Noyes",
+      "lat": 42.058399,
+      "lon": -87.683236,
+      "lines": ["Purple"]
+    },
+    {
+      "name": "Foster",
+      "lat": 42.05416,
+      "lon": -87.683,
+      "lines": ["Purple"]
+    },
+    {
+      "name": "Davis",
+      "lat": 42.04771,
+      "lon": -87.68356,
+      "lines": ["Purple"]
+    },
+    {
+      "name": "Dempster",
+      "lat": 42.041671,
+      "lon": -87.681602,
+      "lines": ["Purple"]
+    },
+    {
+      "name": "Main",
+      "lat": 42.033365,
+      "lon": -87.680476,
+      "lines": ["Purple"]
+    },
+    {
+      "name": "South Boulevard",
+      "lat": 42.027612,
+      "lon": -87.678307,
+      "lines": ["Purple"]
+    },
+    {
+      "name": "Skokie",
+      "lat": 42.034,
+      "lon": -87.758,
+      "lines": ["Yellow"]
+    },
+    {
+      "name": "Oakton-Skokie",
+      "lat": 42.026243,
+      "lon": -87.747221,
+      "lines": ["Yellow"]
+    }
+  ]

@@ -24,6 +24,12 @@ const articles = [
     description: "Exploring the probabilities and patterns in Bingo games through SQL.",
     link: "/bingo-sql",
     date: "December 4th, 2024"
+  },
+  {
+    title: "Train Visualization",
+    description: "Visualizing the train routes in Chicago.",
+    link: "/train-visualization",
+    date: "April 12th, 2025"
   }
 ]
 
