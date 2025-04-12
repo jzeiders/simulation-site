@@ -131,8 +131,25 @@ const TrainVisualization: React.FC = () => {
                   r="3"
                   fill="#333" // Darker color for stations to stand out on lines
                   data-name={station.name}
-                />
+                >
+                  <title>{station.name}</title>
+                </circle>
               ))
+            }
+            </g>
+            <g> {/* Group for station names */}
+            {
+                stations.map((station, index) => (
+                    <text
+                        key={`${station.name}-label-${index}`}
+                        x={scaleX(station.lon) + 5} // Offset text slightly to the right
+                        y={scaleY(station.lat) + 5} // Offset text slightly down
+                        fontSize="8" // Adjust font size as needed
+                        fill="#555" // Text color
+                    >
+                        {station.name}
+                    </text>
+                ))
             }
             </g>
           </svg>
